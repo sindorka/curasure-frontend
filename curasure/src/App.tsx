@@ -1,28 +1,25 @@
-// App.tsx
-import { BrowserRouter as Router, Link, Route, Routes, useNavigate } from 'react-router-dom'
-import './App.css'
-import AppRoutes from './Routes'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import AppRoutes from './Routes';
 
 function App() {
-  const navigate = useNavigate()
-  const onClickHandler = () => navigate(`/login`)
-  
   return (
-    <Router
-      basename='/curasure'
-    >
-      <div>
-        <h1>Welcome to CuraSure - Be Sure With CuraSure</h1>
-        <p>Main welcome page with some app info</p>
-        <div>
-          <Link to="/login" onClick={onClickHandler}>Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-
-        <AppRoutes />
-      </div>
+    <Router basename='/curasure'>
+      <Routes>
+        <Route path="/" element={
+          <div>
+            <h1>Welcome to CuraSure - Be Sure With CuraSure</h1>
+            <p>Main welcome page with some app info</p>
+            <div>
+              <a href="/curasure/login">Login</a>
+              <a href="/curasure/register">Register</a>
+            </div>
+          </div>
+         } /> 
+        <Route path="/*" element={<AppRoutes />} />
+      </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
