@@ -1,7 +1,33 @@
+
+
 {
-  "files": [],
+  // This is your main tsconfig that extends the other configs
+  "extends": "./tsconfig.app.json",
+
+  "compilerOptions": {
+    "composite": true,
+    // Usually also "declaration": true, "declarationMap": true, etc.
+    // if you're building library-style code or want incremental builds
+  },
+  // Possibly "include" or "files" here
+
+  // Add references to other config files if needed (depending on your setup)
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
+  ],
+
+  // This is crucial so TypeScript scans these folders for .ts/.tsx/.d.ts
+  "include": [
+    "src",
+    "types"
+  ],
+
+  // If needed, you can exclude test files, build folders, etc.
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
   ]
+
+
 }
