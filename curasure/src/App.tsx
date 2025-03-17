@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import HeroSection from './core/HeroSection';
 import AboutSection from './core/AboutSection';
 import RolesSection from './core/RolesSection';
@@ -27,7 +27,6 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      {/* NAVBAR */}
       <nav className="navbar">
         <div className="navbar-left">CuraSure</div>
         <div className="navbar-container">
@@ -63,7 +62,6 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Section Rendering */}
       <div className="section-container">
         <CSSTransition
           in={true}
