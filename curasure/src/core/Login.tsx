@@ -11,7 +11,7 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [siteKey, setSiteKey] = useState("");
-  const recaptchaRef = useRef(null);
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
   useEffect(() => {
     // Fetch the site key when component mounts
@@ -29,11 +29,11 @@ function LoginPage() {
     fetchSiteKey();
   }, []);
 
-  const handleCaptchaChange = (token) => {
+  const handleCaptchaChange = (token: any) => {
     setCaptchaToken(token);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -74,7 +74,7 @@ function LoginPage() {
       // Uncomment to redirect to dashboard
       // window.location.href = '/dashboard';
 
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.');
       console.error('Login error:', err);
       // Reset the captcha on failure
