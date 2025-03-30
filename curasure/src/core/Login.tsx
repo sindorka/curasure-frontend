@@ -123,7 +123,7 @@ function LoginPage() {
               <option value="" disabled hidden>Select a role</option>
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
-              <option value="insurance">Insurance Provider</option>
+              <option value="insurance_provider">Insurance Provider</option>
             </select>
 
             {siteKey && (
