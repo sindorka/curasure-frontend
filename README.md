@@ -56,19 +56,19 @@ Frontend will run at: **http://localhost:5173**
 
 ## **Routes**
 
-### **Home Page
+### **Home Page**
 **URL:**
 ```
 http://localhost:5173/curasure
 ```
 
-### **Login Page
+### **Login Page**
 **URL:**
 ```
 http://localhost:5173/curasure/login
 ```
 
-### **Register Page
+### **Register Page**
 **URL:**
 ```
 http://localhost:5173/curasure/register
