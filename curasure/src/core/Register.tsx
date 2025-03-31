@@ -1,35 +1,56 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Register.css"
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
-  const [theme, setTheme] = useState("default");
+  const [role, setRole] = useState("");
+  const [theme, setTheme] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: any) => {
     e.preventDefault();
     setError("");
     setMessage("");
+    setLoading(true);
 
     try {
-      const response = await axios.post("/register", {
-        email,
-        password,
-        role,
-        theme,
+      const response = await fetch("http://localhost:5002/api/auth/register", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          role,
+          theme,
+        }),
       });
 
-      setMessage(response.data.message);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      setMessage(data.message || "Registration successful!");
+
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+      }
+
       setTimeout(() => navigate("/login"), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed.");
+      console.error("Registration error:", err);
+      setError(err.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +62,6 @@ function Register() {
         {message && <p className="success-message">{message}</p>}
         <form onSubmit={handleRegister} className="register-form">
           <div className="input-group">
-            <label>Email:</label>
             <input
               type="email"
               placeholder="Email Address"
@@ -52,7 +72,6 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label>Password:</label>
             <input
               type="password"
               placeholder="Password"
@@ -63,8 +82,8 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label>Role:</label>
             <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="" disabled selected hidden>Select a role</option>
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
               <option value="insurance_provider">Insurance Provider</option>
@@ -72,15 +91,15 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label>Theme:</label>
             <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+              <option value="" disabled selected hidden>Select a theme</option>
               <option value="default">Default</option>
               <option value="dark">Dark</option>
               <option value="light">Light</option>
             </select>
           </div>
 
-          <button className="button">Create Account</button>
+          <button className="button" type="submit">{loading ? "Loading..." : "Create Account"}</button>
           <p className="signinText">
             Already Have An Account? <a href="/curasure/login" className="signinLink">Login</a>
           </p>

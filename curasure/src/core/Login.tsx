@@ -1,68 +1,157 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useRef, useEffect } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./Login.css";
 
-const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("patient");
-    const [message, setMessage] = useState("");
+function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [siteKey, setSiteKey] = useState("");
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
-    const handleLogin = async (e: any) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post("/api/auth/login", { email, password, role });
-            localStorage.setItem("token", response.data.token);
-            setMessage("Login successful!");
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                setMessage(error.response?.data?.message || "Login failed.");
-            } else {
-                setMessage("An unexpected error occurred.");
-            }
-        }
+  useEffect(() => {
+    // Fetch the site key when component mounts
+    const fetchSiteKey = async () => {
+      try {
+        const response = await fetch('http://localhost:5002/api/auth/recaptcha-key');
+        const data = await response.json();
+        setSiteKey(data.siteKey);
+      } catch (error) {
+        console.error("Failed to fetch reCAPTCHA site key:", error);
+        setError("Failed to load CAPTCHA. Please try again later.");
+      }
     };
 
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 className="text-2xl font-bold mb-4">Login</h2>
-                {message && <p className="mb-4 text-red-500">{message}</p>}
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
-                        required
-                    />
-                    <select
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded mb-4"
-                    >
-                        <option value="patient">Patient</option>
-                        <option value="doctor">Doctor</option>
-                        <option value="insurance_provider">Insurance Provider</option>
-                    </select>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                    >
-                        Login
-                    </button>
-                </form>
-            </div>
-        </div>
-    );
-};
+    fetchSiteKey();
+  }, []);
 
-export default Login;
+  const handleCaptchaChange = (token: any) => {
+    setCaptchaToken(token);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    if (!email || !password || !role || !captchaToken) {
+      setError("All fields are required, including CAPTCHA verification");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5002/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          role,
+          captchaToken,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('userData', JSON.stringify(data.user));
+
+      setSuccess(true);
+      console.log('Login successful:', data);
+
+      // Uncomment to redirect to dashboard
+      // window.location.href = '/dashboard';
+
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong. Please try again.');
+      console.error('Login error:', err);
+      // Reset the captcha on failure
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+      setCaptchaToken("");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+      <div className="login-container">
+        <div className="login-box">
+          <h2 className="login-title">Login</h2>
+
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">Login successful!</div>}
+
+          <form onSubmit={handleSubmit}>
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="login-input"
+                required
+            />
+
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="login-input"
+                required
+            />
+
+            <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="login-select"
+                required
+            >
+              <option value="" disabled hidden>Select a role</option>
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+              <option value="insurance_provider">Insurance Provider</option>
+            </select>
+
+            {siteKey && (
+                <div className="captcha-container">
+                  <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={siteKey}
+                      onChange={handleCaptchaChange}
+                  />
+                </div>
+            )}
+
+            <button
+                type="submit"
+                className="login-btn"
+                disabled={loading || !captchaToken}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          <div className="login-links">
+            <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
+            <p className="newUserText">New user? <a href="/curasure/register" className="register-link">Register here</a></p>
+          </div>
+        </div>
+      </div>
+  );
+}
+
+export default LoginPage;
