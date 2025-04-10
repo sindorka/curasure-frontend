@@ -1,7 +1,7 @@
 import React from 'react';
-import heroImage from '../assets/home.svg';
+import heroImage from '../../assets/home.svg';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import '../../App.css';
 
 const HeroSection: React.FC = () => {
     const navigate = useNavigate();

@@ -5,6 +5,7 @@ import "./Register.css"
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [theme, setTheme] = useState("");
   const [error, setError] = useState("");
@@ -28,6 +29,7 @@ function Register() {
         body: JSON.stringify({
           email,
           password,
+          name,
           role,
           theme,
         }),
@@ -61,6 +63,16 @@ function Register() {
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
         <form onSubmit={handleRegister} className="register-form">
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="input-group">
             <input
               type="email"

@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom' 
-import Login from './core/Login' 
-import Register from './core/Register'  
+import Login from './components/core/Login' 
+import Register from './components/core/Register'  
 
 const AppRoutes = () => {   
   return (     

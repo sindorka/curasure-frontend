@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import HeroSection from './core/HeroSection';
-import AboutSection from './core/AboutSection';
-import RolesSection from './core/RolesSection';
-import ContactSection from './core/ContactSection';
+import HeroSection from './components/core/HeroSection';
+import AboutSection from './components/core/AboutSection';
+import RolesSection from './components/core/RolesSection';
+import ContactSection from './components/core/ContactSection';
 import './App.css';
 import AppRoutes from './Routes';
 
