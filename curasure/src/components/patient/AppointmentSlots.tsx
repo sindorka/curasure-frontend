@@ -61,7 +61,7 @@ const removeButtonStyle: CSSProperties = {
   backgroundColor: '#E53E3E', // Red for remove
 };
 
-const AppointmentPagedoc: React.FC = () => {
+const AppointmentSlots: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([
     { id: 'apt001', doctorName: 'Dr. John Doe', date: '2025-05-02', time: '09:30', status: 'Scheduled' },
     { id: 'apt002', doctorName: 'Dr. Emily Jones', date: '2025-05-03', time: '11:00', status: 'Scheduled' },
@@ -103,4 +103,4 @@ const AppointmentPagedoc: React.FC = () => {
   );
 };
 
-export default AppointmentPagedoc;
+export default AppointmentSlots;

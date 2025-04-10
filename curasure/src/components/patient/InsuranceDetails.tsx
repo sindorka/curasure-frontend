@@ -99,7 +99,7 @@ const messageBtnStyle: CSSProperties = {
   alignSelf: 'start',
 };
 
-const InsuranceSearchPage: React.FC = () => {
+const InsuranceDetails: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -195,4 +195,4 @@ const InsuranceSearchPage: React.FC = () => {
   );
 };
 
-export default InsuranceSearchPage;
+export default InsuranceDetails;

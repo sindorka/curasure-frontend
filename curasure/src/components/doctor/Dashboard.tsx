@@ -294,7 +294,7 @@ const AvailabilityCalendar: React.FC<{
 };
 
 /* --- Main Dashdoc Component --- */
-const Dashdoc: React.FC = () => {
+const DoctorDashboard: React.FC = () => {
   const navigate = useNavigate();
 
   // Mock doctor data
@@ -385,4 +385,4 @@ const Dashdoc: React.FC = () => {
   );
 };
 
-export default Dashdoc;
+export default DoctorDashboard;
