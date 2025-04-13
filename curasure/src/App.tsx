@@ -6,6 +6,9 @@ import AboutSection from './components/core/AboutSection';
 import RolesSection from './components/core/RolesSection';
 import ContactSection from './components/core/ContactSection';
 import './App.css';
+import { ToastContainer } from 'react-toastify'; // ✅ already imported
+import 'react-toastify/dist/ReactToastify.css';
+
 import AppRoutes from './Routes';
 
 // Optional: Define a union type for section names
@@ -32,68 +35,51 @@ const App = () => {
     navigate("/login");
   }
 
-
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <div className="App">
-            <nav className="navbar">
-              <div className="navbar-left">CuraSure</div>
-              <div className="navbar-container">
-                <ul className="navbar-menu">
-                  <li
-                    onClick={() => handleNavClick('hero')}
-                    className={`nav-item ${activeSection === 'hero' ? 'active' : ''}`}
-                  >
-                    Home
-                  </li>
-                  <li
-                    onClick={() => handleNavClick('about')}
-                    className={`nav-item ${activeSection === 'about' ? 'active' : ''}`}
-                  >
-                    About
-                  </li>
-                  <li
-                    onClick={() => handleNavClick('roles')}
-                    className={`nav-item ${activeSection === 'roles' ? 'active' : ''}`}
-                  >
-                    Roles
-                  </li>
-                  <li
-                    onClick={() => handleNavClick('contact')}
-                    className={`nav-item ${activeSection === 'contact' ? 'active' : ''}`}
-                  >
-                    Contact
-                  </li>
-                </ul>
-              </div>
-              <div className="navbar-right">
-                <button className="login-btn"
-                  onClick={handleLogin}
-                >
-                  Log In
-                </button>
-              </div>
-            </nav>
+    <>
+      {/* 👇 Wrap your Routes inside Fragment */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="App">
+              <nav className="navbar">
+                <div className="navbar-left">CuraSure</div>
+                <div className="navbar-container">
+                  <ul className="navbar-menu">
+                    <li onClick={() => handleNavClick('hero')} className={`nav-item ${activeSection === 'hero' ? 'active' : ''}`}>Home</li>
+                    <li onClick={() => handleNavClick('about')} className={`nav-item ${activeSection === 'about' ? 'active' : ''}`}>About</li>
+                    <li onClick={() => handleNavClick('roles')} className={`nav-item ${activeSection === 'roles' ? 'active' : ''}`}>Roles</li>
+                    <li onClick={() => handleNavClick('contact')} className={`nav-item ${activeSection === 'contact' ? 'active' : ''}`}>Contact</li>
+                  </ul>
+                </div>
+                <div className="navbar-right">
+                  <button className="login-btn" onClick={handleLogin}>
+                    Log In
+                  </button>
+                </div>
+              </nav>
 
-            <div className="section-container">
-              <CSSTransition
-                in={true}
-                nodeRef={nodeRef}
-                timeout={300}
-                classNames="fade"
-                unmountOnExit
-              >
-                <div ref={nodeRef}>{sections[activeSection]}</div>
-              </CSSTransition>
+              <div className="section-container">
+                <CSSTransition
+                  in={true}
+                  nodeRef={nodeRef}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div ref={nodeRef}>{sections[activeSection]}</div>
+                </CSSTransition>
+              </div>
             </div>
-          </div>
-        }
-      />
-      <Route path="/*" element={<AppRoutes />} />
-    </Routes>
+          }
+        />
+        <Route path="/*" element={<AppRoutes />} />
+      </Routes>
+
+      {/* 👇 ADD TOASTCONTAINER ONCE HERE */}
+      <ToastContainer />
+    </>
   );
 };
 

@@ -1,0 +1,25 @@
+/* MinimalLayout.css */
+.minimal-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fff;
+  }
+  
+  .minimal-navbar {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: white;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    font-weight: bold;
+    font-size: 24px;
+    color: #0b103d;
+    cursor: pointer;
+  }
+  
+  .minimal-content {
+    flex: 1;
+    padding: 20px;
+  }
+  

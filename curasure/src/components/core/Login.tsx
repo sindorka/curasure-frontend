@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
+
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +14,8 @@ function LoginPage() {
   const [success, setSuccess] = useState(false);
   const [siteKey, setSiteKey] = useState("");
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     // Fetch the site key when component mounts
@@ -38,18 +42,18 @@ function LoginPage() {
     setLoading(true);
     setError("");
     setSuccess(false);
-
+  
     if (!email || !password || !role || !captchaToken) {
       setError("All fields are required, including CAPTCHA verification");
       setLoading(false);
       return;
     }
-
+  
     try {
-      const response = await fetch('http://localhost:5002/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5002/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -58,26 +62,42 @@ function LoginPage() {
           captchaToken,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
-
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userData', JSON.stringify(data.user));
-
+  
+      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("userData", JSON.stringify(data.user));
+  
+      const userId = data.user.id;   // This is USER id
+      const userRole = data.user.role;
+  
+      if (userRole === "doctor") {
+        // 🛠️ NEW: Fetch doctor by name (since you have name)
+        const doctorSearchResponse = await fetch(`http://localhost:5002/api/doctors/search?name=${data.user.name}`);
+        const doctors = await doctorSearchResponse.json();
+  
+        if (doctorSearchResponse.ok && doctors.length > 0) {
+          const doctorId = doctors[0]._id;  // ✅ Correct doctor id
+          navigate(`/doctor-dashboard/${doctorId}`);
+        } else {
+          throw new Error("Doctor profile not found. Please complete your profile.");
+        }
+      } else if (userRole === "patient") {
+        navigate(`/patient-dashboard/${userId}`);
+      } else if (userRole === "insurance_provider") {
+        navigate(`/insurance-dashboard/${userId}`);
+      } else {
+        setError("Unknown user role. Cannot redirect.");
+      }
+  
       setSuccess(true);
-      console.log('Login successful:', data);
-
-      // Uncomment to redirect to dashboard
-      // window.location.href = '/dashboard';
-
     } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.');
-      console.error('Login error:', err);
-      // Reset the captcha on failure
+      setError(err.message || "Something went wrong. Please try again.");
+      console.error("Login error:", err);
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
       }
@@ -86,6 +106,7 @@ function LoginPage() {
       setLoading(false);
     }
   };
+  
 
   return (
       <div className="login-container">

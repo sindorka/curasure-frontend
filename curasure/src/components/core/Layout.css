@@ -1,0 +1,13 @@
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .navbar-left {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 20px; /* small left push */
+  }
