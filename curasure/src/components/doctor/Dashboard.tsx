@@ -1,7 +1,9 @@
 import React, { useState, CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
-/* --- Type Definitions --- */
+/* ------------------- TYPE DEFINITIONS ------------------- */
 interface Doctor {
   id: string;
   name: string;
@@ -19,52 +21,48 @@ interface Appointment {
 }
 
 interface AvailabilitySlot {
-  day: string;
-  startTime: string;
-  endTime: string;
+  date: Date;          // The actual date object
+  startTime: string;   // e.g. "09:00"
+  endTime: string;     // e.g. "12:00"
 }
 
-/* --- Inline Styles --- */
-
-// Color constants
+/* ------------------- STYLING CONSTANTS ------------------- */
 const navyColor = '#0F1B40';
 const accentColor = '#185ADB';
 const pageBg = '#F8FAFF';
 const cardBg = '#FFFFFF';
 const textNavy = '#0F1B40';
 
-// Root styles: full viewport, no scrolling
+// Root layout: removed fixed height/overflow to reduce extra whitespace
 const rootStyle: CSSProperties = {
   margin: 0,
   padding: 0,
-  height: '100vh',
-  overflow: 'hidden',
   fontFamily: 'Arial, sans-serif',
-  backgroundColor: pageBg
+  backgroundColor: pageBg,
 };
 
 const wrapperStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  height: '100%'
 };
 
-/* Header Styles */
+// Header styles
 const headerStyle: CSSProperties = {
   flexShrink: 0,
   height: '70px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  backgroundColor: cardBg, // white header
+  backgroundColor: cardBg,
   padding: '0 2rem',
-  position: 'relative'
+  position: 'relative',
+  borderBottom: '1px solid #ddd',
 };
 
 const brandStyle: CSSProperties = {
   fontSize: '1.5rem',
   fontWeight: 'bold',
-  color: navyColor
+  color: navyColor,
 };
 
 const navWrapperStyle: CSSProperties = {
@@ -75,8 +73,8 @@ const navWrapperStyle: CSSProperties = {
   borderRadius: '40px',
   padding: '0.3rem 1rem',
   display: 'flex',
-  gap: '2rem',
-  alignItems: 'center'
+  gap: '1.5rem',
+  alignItems: 'center',
 };
 
 const navItemStyle: CSSProperties = {
@@ -84,16 +82,16 @@ const navItemStyle: CSSProperties = {
   cursor: 'pointer',
   fontWeight: 500,
   padding: '0.3rem 0.8rem',
-  borderRadius: '20px'
+  borderRadius: '20px',
 };
 
 const activeNavItemStyle: CSSProperties = {
-  backgroundColor: '#1A244B'
+  backgroundColor: '#1A244B',
 };
 
 const rightButtonContainerStyle: CSSProperties = {
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
 };
 
 const loginBtnStyle: CSSProperties = {
@@ -103,42 +101,41 @@ const loginBtnStyle: CSSProperties = {
   borderRadius: '5px',
   padding: '0.4rem 1rem',
   cursor: 'pointer',
-  fontWeight: 500
+  fontWeight: 500,
 };
 
-/* Main container (2-column layout) */
+// Main container: reduced padding/gap
 const mainStyle: CSSProperties = {
-  flex: 1,
   display: 'flex',
-  gap: '1rem',
-  padding: '1rem 2rem'
+  gap: '0.5rem',
+  padding: '0.5rem 1rem',
 };
 
+// Left & Right columns
 const leftColumnStyle: CSSProperties = {
-  flex: 1
+  flex: 1,
 };
 
 const rightColumnStyle: CSSProperties = {
   flex: 2,
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem'
+  gap: '0.5rem',
 };
 
-/* Card style for sub-components */
+// Card style for components
 const cardStyle: CSSProperties = {
   backgroundColor: cardBg,
   border: '1px solid #ddd',
   borderRadius: '8px',
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  padding: '1rem',
+  padding: '0.75rem',
   color: textNavy,
-  overflow: 'auto'
 };
 
-/* --- Sub-Components --- */
+/* ------------------- SUB-COMPONENTS ------------------- */
 
-// DoctorProfile: Clickable to navigate to the profile-edit page
+// Doctor Profile Component
 const DoctorProfile: React.FC<{ doctor: Doctor; onClick?: () => void }> = ({ doctor, onClick }) => (
   <div style={{ ...cardStyle, cursor: 'pointer' }} onClick={onClick}>
     <h2 style={{ marginTop: 0 }}>Doctor Profile</h2>
@@ -149,12 +146,12 @@ const DoctorProfile: React.FC<{ doctor: Doctor; onClick?: () => void }> = ({ doc
   </div>
 );
 
-// AppointmentList: Displays appointments with one "View & Edit Appointments" button inside the card
+// Appointment List Component
 const AppointmentList: React.FC<{ appointments: Appointment[]; onViewEdit?: () => void }> = ({ appointments, onViewEdit }) => {
   const appointmentListContainer: CSSProperties = {
     ...cardStyle,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   };
 
   return (
@@ -171,7 +168,7 @@ const AppointmentList: React.FC<{ appointments: Appointment[]; onViewEdit?: () =
                 marginBottom: '0.5rem',
                 backgroundColor: '#F6F8FF',
                 padding: '0.5rem',
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
             >
               <strong>Patient:</strong> {apt.patientName} <br />
@@ -190,12 +187,12 @@ const AppointmentList: React.FC<{ appointments: Appointment[]; onViewEdit?: () =
             color: '#fff',
             border: 'none',
             borderRadius: '5px',
-            padding: '0.25rem 0.75rem', // Reduced size
+            padding: '0.25rem 0.75rem',
             fontSize: '0.85rem',
             cursor: 'pointer',
             fontWeight: 500,
-            marginTop: '1rem',
-            alignSelf: 'flex-start'
+            marginTop: '0.5rem',
+            alignSelf: 'flex-start',
           }}
         >
           View &amp; Edit Appointments
@@ -205,56 +202,79 @@ const AppointmentList: React.FC<{ appointments: Appointment[]; onViewEdit?: () =
   );
 };
 
-// AvailabilityCalendar: Displays and adds availability slots
-const AvailabilityCalendar: React.FC<{
+/* ------------------- CALENDAR WITH AVAILABILITY ------------------- */
+const CalendarWithAvailability: React.FC<{
   availability: AvailabilitySlot[];
   onAddSlot: (slot: AvailabilitySlot) => void;
 }> = ({ availability, onAddSlot }) => {
-  const [day, setDay] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  // Default selected date is April 19, 2025 to show provided time slot
+  const defaultDate = new Date('2025-04-19T13:26:00');
+  const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
+  const [startTime, setStartTime] = useState('13:26');
+  const [endTime, setEndTime] = useState('00:25');
 
-  const handleAddSlot = () => {
-    if (!day || !startTime || !endTime) return;
-    onAddSlot({ day, startTime, endTime });
-    setDay('');
-    setStartTime('');
-    setEndTime('');
+  // Utility: check if two dates are the same day
+  const isSameDay = (d1: Date, d2: Date) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  // Filter the availability for the selected day
+  const timeRangesForSelectedDay = availability.filter((slot) =>
+    isSameDay(slot.date, selectedDate)
+  );
+
+  // When adding a new availability slot, call onAddSlot
+  const handleAddAvailability = () => {
+    if (!startTime || !endTime) return;
+    onAddSlot({
+      date: selectedDate,
+      startTime,
+      endTime,
+    });
+    // Optionally clear times:
+    // setStartTime('');
+    // setEndTime('');
+  };
+
+  // tileClassName: highlight days with availability in green
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (view === 'month') {
+      const hasAvailability = availability.some((slot) => isSameDay(slot.date, date));
+      return hasAvailability ? 'highlight-day' : null;
+    }
+    return null;
   };
 
   return (
     <div style={cardStyle}>
-      <h2 style={{ marginTop: 0 }}>Availability</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '1rem' }}>
-        <thead>
-          <tr style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>
-            <th>Day</th>
-            <th>Start</th>
-            <th>End</th>
-          </tr>
-        </thead>
-        <tbody>
-          {availability.map((slot, idx) => (
-            <tr key={idx} style={{ borderBottom: '1px solid #ccc' }}>
-              <td style={{ padding: '0.5rem' }}>{slot.day}</td>
-              <td style={{ padding: '0.5rem' }}>{slot.startTime}</td>
-              <td style={{ padding: '0.5rem' }}>{slot.endTime}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2 style={{ marginTop: 0, marginBottom: '0.5rem', color: navyColor }}>Availability</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <label>
-          Day:
-          <input
-            type="text"
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-            placeholder="e.g. Monday"
-            style={{ marginLeft: '0.5rem' }}
-          />
-        </label>
+      {/* Display times for selected date above calendar */}
+      <div style={{ marginBottom: '0.5rem' }}>
+        <strong>Times for {selectedDate.toDateString()}:</strong>
+        {timeRangesForSelectedDay.length === 0 ? (
+          <p style={{ margin: '0.3rem 0' }}>No time slots added yet.</p>
+        ) : (
+          <ul style={{ paddingLeft: '1.5rem', margin: 0 }}>
+            {timeRangesForSelectedDay.map((slot, idx) => (
+              <li key={idx} style={{ marginBottom: '0.3rem' }}>
+                {slot.startTime} - {slot.endTime}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Calendar */}
+      <Calendar
+        onChange={(date) => setSelectedDate(date as Date)}
+        value={selectedDate}
+        tileClassName={tileClassName}
+      />
+
+      {/* Form to add availability for the selected date */}
+      <div style={{ display: 'flex', flexDirection: 'column', marginTop: '0.5rem', gap: '0.5rem' }}>
         <label>
           Start Time:
           <input
@@ -273,9 +293,8 @@ const AvailabilityCalendar: React.FC<{
             style={{ marginLeft: '0.5rem' }}
           />
         </label>
-
         <button
-          onClick={handleAddSlot}
+          onClick={handleAddAvailability}
           style={{
             alignSelf: 'start',
             backgroundColor: accentColor,
@@ -283,7 +302,8 @@ const AvailabilityCalendar: React.FC<{
             border: 'none',
             borderRadius: '4px',
             padding: '0.4rem 1rem',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginTop: '0.5rem',
           }}
         >
           Add Availability
@@ -293,7 +313,7 @@ const AvailabilityCalendar: React.FC<{
   );
 };
 
-/* --- Main Dashdoc Component --- */
+/* ------------------- MAIN DASHBOARD COMPONENT ------------------- */
 const DoctorDashboard: React.FC = () => {
   const navigate = useNavigate();
 
@@ -303,42 +323,35 @@ const DoctorDashboard: React.FC = () => {
     name: 'Dr. Jane Doe',
     specialization: 'Cardiology',
     experience: 10,
-    bio: 'Enthusiastic about preventive cardiology and patient-centered healthcare.'
+    bio: 'Enthusiastic about preventive cardiology and patient-centered healthcare.',
   });
 
   // Mock appointments data
   const [appointments] = useState<Appointment[]>([
     { id: 'apt001', patientName: 'John Smith', date: '2025-05-02', time: '09:30', status: 'Scheduled' },
     { id: 'apt002', patientName: 'Alice Brown', date: '2025-05-02', time: '14:00', status: 'Scheduled' },
-    { id: 'apt003', patientName: 'Sarah Johnson', date: '2025-05-03', time: '11:00', status: 'Cancelled' }
+    { id: 'apt003', patientName: 'Sarah Johnson', date: '2025-05-03', time: '11:00', status: 'Cancelled' },
   ]);
 
-  // Mock availability data
+  // Set default availability to include the desired date/time slot
   const [availability, setAvailability] = useState<AvailabilitySlot[]>([
-    { day: 'Monday', startTime: '09:00', endTime: '12:00' },
-    { day: 'Wednesday', startTime: '13:00', endTime: '16:00' }
+    {
+      date: new Date('2025-04-19T13:26:00'),
+      startTime: '13:26',
+      endTime: '00:25',
+    },
   ]);
 
+  // Add new availability slot
   const handleAddAvailability = (slot: AvailabilitySlot) => {
-    setAvailability(prev => [...prev, slot]);
+    setAvailability((prev) => [...prev, slot]);
   };
 
-  // Navigation functions for header nav items and profile
-  const handleDashboardClick = () => {
-    navigate('/dashdoc');
-  };
-
-  const handleAppointmentsClick = () => {
-    navigate('/doctor/appointment');
-  };
-
-  const handleProfileClick = () => {
-    navigate('/doctor/profile');
-  };
-
-  const handleMessagesClick = () => {
-    navigate('/doctor/messages');
-  };
+  // Navigation functions
+  const handleDashboardClick = () => navigate('/dashdoc');
+  const handleAppointmentsClick = () => navigate('/doctor/appointment');
+  const handleProfileClick = () => navigate('/doctor/profile');
+  const handleMessagesClick = () => navigate('/doctor/messages');
 
   return (
     <div style={rootStyle}>
@@ -346,7 +359,6 @@ const DoctorDashboard: React.FC = () => {
         {/* Header */}
         <header style={headerStyle}>
           <div style={brandStyle}>CuraSure</div>
-
           <div style={navWrapperStyle}>
             <div style={{ ...navItemStyle, ...activeNavItemStyle }} onClick={handleDashboardClick}>
               Dashboard
@@ -361,7 +373,6 @@ const DoctorDashboard: React.FC = () => {
               Profile
             </div>
           </div>
-
           <div style={rightButtonContainerStyle}>
             <button style={loginBtnStyle}>Log Out</button>
           </div>
@@ -369,18 +380,51 @@ const DoctorDashboard: React.FC = () => {
 
         {/* Main Content */}
         <main style={mainStyle}>
-          {/* Left Column: Clickable Doctor Profile */}
+          {/* Left Column: Doctor Profile */}
           <div style={leftColumnStyle} onClick={handleProfileClick}>
             <DoctorProfile doctor={doctor} />
           </div>
 
-          {/* Right Column: Availability & Appointments */}
+          {/* Right Column: Calendar with Availability and Appointment List */}
           <div style={rightColumnStyle}>
-            <AvailabilityCalendar availability={availability} onAddSlot={handleAddAvailability} />
-            <AppointmentList appointments={appointments} onViewEdit={handleAppointmentsClick} />
+            <CalendarWithAvailability
+              availability={availability}
+              onAddSlot={handleAddAvailability}
+            />
+            <AppointmentList
+              appointments={appointments}
+              onViewEdit={handleAppointmentsClick}
+            />
           </div>
         </main>
       </div>
+
+      {/* Override react-calendar styles to ensure text is visible */}
+      <style>
+        {`
+          .react-calendar {
+            color: ${navyColor};
+            background: ${cardBg};
+            border: none;
+          }
+          .react-calendar__navigation button {
+            color: ${navyColor};
+            font-weight: 600;
+          }
+          .react-calendar__month-view__weekdays {
+            color: ${accentColor};
+            font-weight: 500;
+          }
+          .react-calendar__tile {
+            color: ${navyColor} !important;
+          }
+          .highlight-day {
+            background-color: #4caf50 !important;
+            color: #fff !important;
+            border-radius: 50%;
+          }
+        `}
+      </style>
     </div>
   );
 };

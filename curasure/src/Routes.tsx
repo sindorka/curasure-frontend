@@ -8,6 +8,10 @@ import PatientDashboard from './components/patient/Dashboard';
 import InsuranceDetails from './components/patient/InsuranceDetails';
 import PatientProfilePage from './components/patient/Profile';
 import AppointmentSlots from './components/patient/AppointmentSlots';
+import InsuranceDashboard from './components/insurance/Dashboard';
+import InsuranceProviderProfile from './components/insurance/Profile';
+
+
 
 
 const AppRoutes = () => {
@@ -22,6 +26,9 @@ const AppRoutes = () => {
       <Route path='/patient/appointment' element={<AppointmentSlots />} />
       <Route path='/patient/insurance' element={<InsuranceDetails />} />
       <Route path='/patient/profile' element={< PatientProfilePage />} />
+      <Route path='/insurance/home' element={<InsuranceDashboard />} />
+      <Route path='/insurance/profile' element={< InsuranceProviderProfile />} />
+      
 
 
     </Routes>
