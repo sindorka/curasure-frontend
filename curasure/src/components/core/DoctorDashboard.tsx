@@ -72,40 +72,43 @@ const [editForm, setEditForm] = useState({
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      try {
-        const doctorRes = await axios.get(`http://localhost:5002/api/doctor/${id}`);
-        const doctorData = doctorRes.data.doctor;
-        setDoctor(doctorData);
-
-        const appointmentsRes = await axios.get(`http://localhost:5002/api/appointments/doctor/${id}`);
-        const appointments = appointmentsRes.data.patients;
-
-        const fullPatients = await Promise.all(
-            appointments.map(async (patient: any) => {
-              const res = await axios.get(`http://localhost:5002/api/patient/${patient._id}/full-details`);
-              const { patient: fullInfo } = res.data;   // ⬅️ fullInfo already has everything now
-          
-              return fullInfo;   // ⬅️ no extra override needed
+        try {
+          // 🏥 1. Get Doctor Profile
+          const doctorRes = await axios.get(`http://localhost:5002/api/doctor/${id}`);
+          const doctorData = doctorRes.data.doctor;
+          setDoctor(doctorData);
+      
+          // 🧑‍⚕️ 2. Get Doctor's Full Appointments
+          const appointmentsListRes = await axios.get(`http://localhost:5002/api/appointments/list/${id}`);
+          const appointments = appointmentsListRes.data.appointments;  // ⬅️ appointments now directly
+      
+          // 🧠 3. Fetch Full Patient Info from Appointments
+          const fullPatients = await Promise.all(
+            appointments.map(async (appointment: any) => {
+              const res = await axios.get(`http://localhost:5002/api/patient/${appointment.patientId._id}/full-details`);
+              const { patient: fullInfo } = res.data;
+              return fullInfo;
             })
           );
-          
-
-        console.log("Full Patients List -->", fullPatients);
-        setPatients(fullPatients);
-
-        const appointmentsListRes = await axios.get(`http://localhost:5002/api/appointments/list/${id}`);
-        setAppointments(appointmentsListRes.data.appointments);
-
-        if (doctorData.hospital && doctorData.hospital._id) {
-          const bedRes = await axios.get(`http://localhost:5002/api/hospital-beds/${doctorData.hospital._id}`);
-          setBedInfo(bedRes.data);
+      
+          console.log("Full Patients List -->", fullPatients);
+      
+          // 4️⃣  Set state
+          setPatients(fullPatients);
+          setAppointments(appointments);
+      
+          // 🛏️ 5. Bed info
+          if (doctorData.hospital && doctorData.hospital._id) {
+            const bedRes = await axios.get(`http://localhost:5002/api/hospital-beds/${doctorData.hospital._id}`);
+            setBedInfo(bedRes.data);
+          }
+        } catch (error) {
+          console.error("Error fetching doctor dashboard:", error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching doctor dashboard:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
+      
 
     fetchDashboardData();
   }, [id]);

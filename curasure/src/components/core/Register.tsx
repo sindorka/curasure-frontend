@@ -79,7 +79,32 @@ function Register() {
         }
 
         console.log("Doctor profile created successfully:", doctorData);
+      }else if (role === 'patient') {
+        const patientResponse = await fetch("http://localhost:5002/api/patient", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            age: 0,
+            gender: "",
+            contact: "",
+            address: ""
+          }),
+        });
+      
+        const patientData = await patientResponse.json();
+      
+        if (!patientResponse.ok) {
+          throw new Error(patientData.message || "Error saving patient profile");
+        }
+      
+        console.log("Patient profile created successfully:", patientData);
       }
+      
+
+      // Inside handleRegister function after successful user registration:
+
+
 
       // Step 3: After everything, redirect to login
       setTimeout(() => navigate("/login"), 2000);

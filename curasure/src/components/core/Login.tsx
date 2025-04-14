@@ -87,7 +87,15 @@ function LoginPage() {
           throw new Error("Doctor profile not found. Please complete your profile.");
         }
       } else if (userRole === "patient") {
-        navigate(`/patient-dashboard/${userId}`);
+        const patientSearchResponse = await fetch(`http://localhost:5002/api/patients/search?name=${data.user.name}`);
+  const patients = await patientSearchResponse.json();
+
+  if (patientSearchResponse.ok && patients.length > 0) {
+    const patientId = patients[0]._id;  // ✅
+    navigate(`/patient-dashboard/${patientId}`);
+  } else {
+    throw new Error("Patient profile not found. Please complete your profile.");
+  }
       } else if (userRole === "insurance_provider") {
         navigate(`/insurance-dashboard/${userId}`);
       } else {
