@@ -524,12 +524,52 @@ const [editForm, setEditForm] = useState({
 <h3>Profile Picture</h3>
 
 {editForm.profilePicture && (
-  <img
-    src={editForm.profilePicture}
-    alt="Profile Preview"
-    style={{ width: "100px", height: "100px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }}
-  />
+  <div style={{ 
+    display: "flex", 
+    flexDirection: "column", 
+    alignItems: "center", 
+    marginBottom: "20px" 
+  }}>
+    <img
+      src={editForm.profilePicture}
+      alt="Profile Preview"
+      style={{ 
+        width: "120px", 
+        height: "120px", 
+        borderRadius: "50%", 
+        objectFit: "cover", 
+        marginBottom: "10px", 
+        boxShadow: "0 4px 8px rgba(0,0,0,0.2)" 
+      }}
+    />
+    <button 
+      style={{ 
+        marginTop: "5px", 
+        padding: "6px 16px", 
+        backgroundColor: "#ff4d4f", 
+        color: "white", 
+        border: "none", 
+        borderRadius: "8px", 
+        cursor: "pointer",
+        fontWeight: "bold",
+        fontSize: "14px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+        transition: "background-color 0.3s ease"
+      }}
+      onClick={() => {
+        setEditForm((prev) => ({
+          ...prev,
+          profilePicture: "", // ✅ Clear picture
+        }));
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d9363e")}
+      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#ff4d4f")}
+    >
+      Delete Image
+    </button>
+  </div>
 )}
+
 
 <input 
   type="file"
