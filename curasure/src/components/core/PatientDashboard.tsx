@@ -54,7 +54,8 @@ const [editForm, setEditForm] = useState({
     medicalConditions: '' as string,
     testDate: null as Date | string | null, 
     insuranceCompany: "",
-    insuranceStatus: ""
+    insuranceStatus: "",
+    profilePicture: "",
 });
 
 
@@ -115,6 +116,7 @@ const [editForm, setEditForm] = useState({
         medicalConditions: editForm.medicalConditions, // split into array
         insuranceCompany: editForm.insuranceCompany,
         insuranceStatus: editForm.insuranceStatus,
+        profilePicture: editForm.profilePicture,
       };
   
       await axios.put(`http://localhost:5002/api/patient/${id}/update`, payload);
@@ -129,6 +131,20 @@ const [editForm, setEditForm] = useState({
     } catch (error) {
       console.error('Error updating profile:', error);
       alert('Failed to update profile.');
+    }
+  };
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditForm((prev) => ({
+          ...prev,
+          profilePicture: reader.result as string, // store base64 or URL
+        }));
+      };
+      reader.readAsDataURL(file);  // reads file as Base64
     }
   };
   
@@ -357,6 +373,7 @@ const [editForm, setEditForm] = useState({
   {/* Top: Image and Name */}
   <div className="profile-header">
     <img 
+      key={patient?.profilePicture} 
       src={patient?.profilePicture || defaultPatientImage}
       alt="Profile"
     />
@@ -403,6 +420,7 @@ const [editForm, setEditForm] = useState({
         medicalConditions: patient.medicalConditions ? patient.medicalConditions.join(", ") : "",  // <-- Convert array to string
         insuranceCompany: patient.insuranceCompany || "",
         insuranceStatus: patient.insuranceStatus || "",
+        profilePicture: patient.profilePicture || ""
     });
   }
 
@@ -502,6 +520,22 @@ const [editForm, setEditForm] = useState({
         onChange={(e) => setEditForm({ ...editForm, insuranceStatus: e.target.value })}
         placeholder="Coverage Status"
       />
+
+<h3>Profile Picture</h3>
+
+{editForm.profilePicture && (
+  <img
+    src={editForm.profilePicture}
+    alt="Profile Preview"
+    style={{ width: "100px", height: "100px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }}
+  />
+)}
+
+<input 
+  type="file"
+  accept="image/*"
+  onChange={(e) => handleProfileImageChange(e)}
+/>
 
       {/* Save/Cancel Buttons */}
       <div className="modal-buttons">
@@ -650,10 +684,12 @@ const [editForm, setEditForm] = useState({
 
       {showCovidModal && (
   <div className="modal-overlay">
-    <div className="modal-container">
-      <h2>COVID-19 Questionnaire</h2>
+  <div className="modal-container">
+    <h2 className="modal-title">COVID-19 Questionnaire</h2>
 
-      <label>
+    {/* 🩺 Form Grid */}
+    <div className="covid-form-grid">
+      <label className="checkbox-item">
         <input
           type="checkbox"
           checked={tempCovidForm.fever}
@@ -661,7 +697,8 @@ const [editForm, setEditForm] = useState({
         />
         Fever
       </label>
-      <label>
+
+      <label className="checkbox-item">
         <input
           type="checkbox"
           checked={tempCovidForm.cough}
@@ -669,7 +706,8 @@ const [editForm, setEditForm] = useState({
         />
         Cough
       </label>
-      <label>
+
+      <label className="checkbox-item">
         <input
           type="checkbox"
           checked={tempCovidForm.breathingDifficulty}
@@ -677,7 +715,8 @@ const [editForm, setEditForm] = useState({
         />
         Breathing Difficulty
       </label>
-      <label>
+
+      <label className="checkbox-item">
         <input
           type="checkbox"
           checked={tempCovidForm.contactWithCovidPatient}
@@ -685,7 +724,8 @@ const [editForm, setEditForm] = useState({
         />
         Contact with COVID-19 Patient
       </label>
-      <label>
+
+      <label className="checkbox-item">
         <input
           type="checkbox"
           checked={tempCovidForm.needCovidTest}
@@ -693,17 +733,20 @@ const [editForm, setEditForm] = useState({
         />
         Need COVID Test
       </label>
+    </div>
 
-      <div className="modal-buttons">
-        <button className="save-btn" onClick={submitCovidForm}>
-          Submit
-        </button>
-        <button className="cancel-btn" onClick={() => setShowCovidModal(false)}>
-          Cancel
-        </button>
-      </div>
+    {/* Buttons */}
+    <div className="modal-buttons">
+      <button className="save-btn" onClick={submitCovidForm}>
+        Submit
+      </button>
+      <button className="cancel-btn" onClick={() => setShowCovidModal(false)}>
+        Cancel
+      </button>
     </div>
   </div>
+</div>
+
 )}
 
 
