@@ -100,6 +100,23 @@ function Register() {
       
         console.log("Patient profile created successfully:", patientData);
       }
+      else if (role === 'insurance_provider') {
+        const providerProfile = await fetch("http://localhost:5002/api/insurance-provider/insurance", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            companyName: "CuraSure Insurance Co."   // Default company name
+          }),
+        });
+      
+        const providerData = await providerProfile.json();
+        if (!providerProfile.ok) {
+          throw new Error(providerData.message || "Error creating insurance provider profile");
+        }
+      }
       
 
       // Inside handleRegister function after successful user registration:

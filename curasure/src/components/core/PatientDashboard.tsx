@@ -6,6 +6,10 @@ import defaultDoctorImage from "../../assets/default.png";
 import Calendar from "react-calendar";   // ✅ Correct import
 import "react-calendar/dist/Calendar.css";
 import defaultPatientImage from "../../assets/default.png";
+import ViewCovidArticles from "./ViewCovidArticles";
+import InsuranceTab from "./InsuranceTab"; // import this
+
+
 
 type Value = Date | Date[] | null;
 
@@ -352,6 +356,8 @@ const [editForm, setEditForm] = useState({
         <nav>
           <button onClick={() => setActiveTab('profile')}>Profile</button>
           <button onClick={() => setActiveTab('doctors')}>Doctors</button>
+          <button onClick={() => setActiveTab("insurance")}>Insurance</button>
+          <button onClick={() => setActiveTab("covid-articles")}>COVID-19 Articles</button>
           <button 
             onClick={() => {
               localStorage.removeItem('authToken');
@@ -973,6 +979,15 @@ const [editForm, setEditForm] = useState({
 
   </div>
 )}
+
+{activeTab === "insurance" && (
+  <InsuranceTab patientId={patient._id} />
+)}
+
+{activeTab === "covid-articles" && (
+  <ViewCovidArticles />
+)}
+
 
 
         {activeTab === 'covid' && (

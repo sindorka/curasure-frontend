@@ -9,6 +9,7 @@ import InsuranceDetails from './components/patient/InsuranceDetails';
 import PatientProfilePage from './components/patient/Profile';
 import AppointmentSlots from './components/patient/AppointmentSlots';
 import ProtectedRoute from './components/core/ProtectedRoutes';
+import InsuranceProviderDashboard from './components/core/InsuranceProviderDashboard';
 
 
 const AppRoutes = () => {
@@ -27,11 +28,19 @@ const AppRoutes = () => {
           <PatientDashboard />
         </ProtectedRoute>
       } />
+
+      
       <Route path='/doctor/profile' element={<Doctorprofile />} />
       <Route path='/doctor/appointment' element={<AppointmentPage />} />
       <Route path='/patient/appointment' element={<AppointmentSlots />} />
       <Route path='/patient/insurance' element={<InsuranceDetails />} />
       <Route path='/patient/profile' element={< PatientProfilePage />} />
+
+      <Route path="/insurance-dashboard/:id" element={
+        <ProtectedRoute>
+          <InsuranceProviderDashboard />
+        </ProtectedRoute>
+      } />
 
 
     </Routes>
