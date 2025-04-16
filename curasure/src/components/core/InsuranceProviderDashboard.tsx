@@ -6,7 +6,7 @@ import ManagePackages from "./ManagePackages";
 import SubscribedPatients from "./SubscribedPatients";
 import PublishCovidArticles from "./PublishCovidArticles";
 import Statistics from "./Statistics";
-import ChatInbox from './ChatInbox';
+import InsuranceChatInbox from './InsuranceChatInbox';
 import ChatWindow from './ChatWindow';
 import socket from "../utils/socket";
 
@@ -115,19 +115,20 @@ function InsuranceProviderDashboard() {
 
 {activeTab === 'chat' && (
   <div style={{ display: "flex", height: "70vh" }}>
-    <ChatInbox
-      users={chatPatients}
-      onSelectUser={setSelectedChatPatient}
-      selectedUserId={selectedChatPatient?._id || null}
-    />
-    {selectedChatPatient && provider?._id && (
-  <ChatWindow
-    currentUserId={provider._id}
-    selectedUser={selectedChatPatient}
-  />
-)}
+    <InsuranceChatInbox
+  users={chatPatients}
+  onSelectUser={setSelectedChatPatient}
+  selectedUserId={selectedChatPatient?._id || null}
+/>
+    {selectedChatPatient && (
+      <ChatWindow
+        currentUserId={provider._id}
+        selectedUser={selectedChatPatient}
+      />
+    )}
   </div>
 )}
+
       </div>
     </div>
   );
