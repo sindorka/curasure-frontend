@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import "./DoctorDashboard.css";
 import defaultDoctorImage from "../../assets/default.png";
-import ChatInbox from './ChatInbox';
+
 import ChatWindow from './ChatWindow';
 import socket from '../utils/socket';
-import DoctorGroupChat from "./DoctorGroupChat";
+import DoctorChatInbox from './DoctorChatInbox';
+import DoctorGroupChat from './DoctorGroupChat';
+
 
 
 function DoctorDashboard() {
@@ -204,6 +206,7 @@ const [editForm, setEditForm] = useState({
           <button onClick={() => setActiveTab('patients')}>Patients</button>
           <button onClick={() => setActiveTab('appointments')}>Appointments</button>
           <button onClick={() => setActiveTab('chat')}>Chat</button>
+          <button onClick={() => setActiveTab('group-chat')}>Group Chat</button>
           <button 
             onClick={() => {
               localStorage.removeItem('authToken');
@@ -223,7 +226,7 @@ const [editForm, setEditForm] = useState({
   <div className="page-container">
     <h2>💬 Chat with Patients</h2>
     <div className="chat-section" style={{ display: 'flex', height: '70vh' }}>
-      <ChatInbox
+      <DoctorChatInbox
         users={chatPatients}
         onSelectUser={setSelectedChatPatient}
         selectedUserId={selectedChatPatient?._id || null}
@@ -235,10 +238,12 @@ const [editForm, setEditForm] = useState({
         />
       )}
     </div>
+  </div>
+)}
 
-    <div style={{ marginTop: "30px" }}>
-      <DoctorGroupChat doctorId={doctorId} />
-    </div>
+{activeTab === 'group-chat' && doctorId && (
+  <div className="page-container">
+    <DoctorGroupChat doctorId={doctorId} />
   </div>
 )}
         {activeTab === 'home' && (

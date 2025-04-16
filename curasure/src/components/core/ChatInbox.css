@@ -32,3 +32,15 @@
     border-radius: 50%;
   }
   
+  .chat-section-toggle {
+    font-weight: bold;
+    margin: 12px 0 6px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s;
+  }
+  
+  .chat-section-toggle:hover {
+    color: #007bff;
+  }
+  
