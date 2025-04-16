@@ -8,6 +8,10 @@ import "react-calendar/dist/Calendar.css";
 import defaultPatientImage from "../../assets/default.png";
 import ViewCovidArticles from "./ViewCovidArticles";
 import InsuranceTab from "./InsuranceTab"; // import this
+import ChatInbox from './ChatInbox';
+import ChatWindow from './ChatWindow';
+import socket from '../utils/socket';
+
 
 
 
@@ -30,10 +34,14 @@ function PatientDashboard() {
   const [profileFeedbacks, setProfileFeedbacks] = useState<any[]>([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [doctorFeedbacks, setDoctorFeedbacks] = useState<any[]>([]);
+  const [onlineMap, setOnlineMap] = useState<Record<string, boolean>>({});
   const [doctorRatings, setDoctorRatings] = useState<Map<string, string>>(new Map());
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedChatUser, setSelectedChatUser] = useState<any | null>(null);
   const [showCovidModal, setShowCovidModal] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
   const [tempCovidForm, setTempCovidForm] = useState({
     fever: false,
     cough: false,
@@ -101,6 +109,24 @@ const [editForm, setEditForm] = useState({
     
       fetchPatientDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (!patient?._id) return;
+  
+    const id = patient._id;
+    const role = "patient";
+  
+    socket.connect();
+  
+    axios
+      .get(`http://localhost:5002/api/chat/users/${id}/${role}`)
+      .then((res) => setUsers(res.data))
+      .catch(console.error);
+  
+    return () => {
+      socket.disconnect();
+    };
+  }, [patient?._id]);
 
   const hasVisitedDoctor = (doctorId: string) => {
     return appointments.some(app => app.doctorId && app.doctorId._id === doctorId);
@@ -358,6 +384,7 @@ const [editForm, setEditForm] = useState({
           <button onClick={() => setActiveTab('doctors')}>Doctors</button>
           <button onClick={() => setActiveTab("insurance")}>Insurance</button>
           <button onClick={() => setActiveTab("covid-articles")}>COVID-19 Articles</button>
+          <button onClick={() => setActiveTab('chat')}>Chat</button>
           <button 
             onClick={() => {
               localStorage.removeItem('authToken');
@@ -986,6 +1013,22 @@ const [editForm, setEditForm] = useState({
 
 {activeTab === "covid-articles" && (
   <ViewCovidArticles />
+)}
+
+{activeTab === "chat" && (
+  <div style={{ display: "flex", height: "70vh" }}>
+    <ChatInbox
+      users={users}
+      onSelectUser={setSelectedUser}
+      selectedUserId={selectedUser?._id || null}
+    />
+    {selectedUser && (
+      <ChatWindow
+        currentUserId={patient._id}
+        selectedUser={selectedUser}
+      />
+    )}
+  </div>
 )}
 
 

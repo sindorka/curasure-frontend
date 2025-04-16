@@ -4,6 +4,11 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import "./DoctorDashboard.css";
 import defaultDoctorImage from "../../assets/default.png";
+import ChatInbox from './ChatInbox';
+import ChatWindow from './ChatWindow';
+import socket from '../utils/socket';
+import DoctorGroupChat from "./DoctorGroupChat";
+
 
 function DoctorDashboard() {
   const { id } = useParams<{ id: string }>();
@@ -15,7 +20,9 @@ function DoctorDashboard() {
   const [activeTab, setActiveTab] = useState('home');
   const [isAdmitting, setIsAdmitting] = useState(false);
   const [admittedPatients, setAdmittedPatients] = useState<string[]>([]);
-
+  const [chatPatients, setChatPatients] = useState<any[]>([]);
+  const [selectedChatPatient, setSelectedChatPatient] = useState<any | null>(null);
+  const [doctorId, setDoctorId] = useState<string>(""); // you'll set this from route or token
   const [showModal, setShowModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [medicalConditionsInput, setMedicalConditionsInput] = useState('');
@@ -72,46 +79,55 @@ const [editForm, setEditForm] = useState({
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-        try {
-          // 🏥 1. Get Doctor Profile
-          const doctorRes = await axios.get(`http://localhost:5002/api/doctor/${id}`);
-          const doctorData = doctorRes.data.doctor;
-          setDoctor(doctorData);
-      
-          // 🧑‍⚕️ 2. Get Doctor's Full Appointments
-          const appointmentsListRes = await axios.get(`http://localhost:5002/api/appointments/list/${id}`);
-          const appointments = appointmentsListRes.data.appointments;  // ⬅️ appointments now directly
-      
-          // 🧠 3. Fetch Full Patient Info from Appointments
-          const fullPatients = await Promise.all(
-            appointments.map(async (appointment: any) => {
-              const res = await axios.get(`http://localhost:5002/api/patient/${appointment.patientId._id}/full-details`);
-              const { patient: fullInfo } = res.data;
-              return fullInfo;
-            })
-          );
-      
-          console.log("Full Patients List -->", fullPatients);
-      
-          // 4️⃣  Set state
-          setPatients(fullPatients);
-          setAppointments(appointments);
-      
-          // 🛏️ 5. Bed info
-          if (doctorData.hospital && doctorData.hospital._id) {
-            const bedRes = await axios.get(`http://localhost:5002/api/hospital-beds/${doctorData.hospital._id}`);
-            setBedInfo(bedRes.data);
-          }
-        } catch (error) {
-          console.error("Error fetching doctor dashboard:", error);
-        } finally {
-          setLoading(false);
+      try {
+        // 🏥 1. Get Doctor Profile
+        const doctorRes = await axios.get(`http://localhost:5002/api/doctor/${id}`);
+        const doctorData = doctorRes.data.doctor;
+        setDoctor(doctorData);
+        setDoctorId(doctorData._id); // ✅ set doctorId here
+  
+        // 🧑‍⚕️ 2. Get Doctor's Full Appointments
+        const appointmentsListRes = await axios.get(`http://localhost:5002/api/appointments/list/${id}`);
+        const appointments = appointmentsListRes.data.appointments;
+        setAppointments(appointments);
+  
+        // 🧠 3. Fetch Full Patient Info from Appointments
+        const fullPatients = await Promise.all(
+          appointments.map(async (appointment: any) => {
+            const res = await axios.get(`http://localhost:5002/api/patient/${appointment.patientId._id}/full-details`);
+            return res.data.patient;
+          })
+        );
+  
+        setPatients(fullPatients);          // ✅ for Patients tab
+        setChatPatients(fullPatients);      // ✅ for Chat tab
+        console.log("💬 Chat Patients:", fullPatients);
+  
+        // 🛏️ 4. Bed info
+        if (doctorData.hospital && doctorData.hospital._id) {
+          const bedRes = await axios.get(`http://localhost:5002/api/hospital-beds/${doctorData.hospital._id}`);
+          setBedInfo(bedRes.data);
         }
-      };
-      
+  
+        // 🔗 5. Socket connection after doctorId available
+        socket.connect();
+        socket.emit("register", doctorData._id);
+      } catch (error) {
+        console.error("❌ Error fetching doctor dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+  
     fetchDashboardData();
+  
+    // ✅ Disconnect socket on cleanup
+    return () => {
+      socket.disconnect();
+    };
   }, [id]);
+  
 
   const handleBedUpdate = async (change: number, patientId: string) => {
     if (!doctor?.hospital?._id) return;
@@ -187,6 +203,7 @@ const [editForm, setEditForm] = useState({
           <button onClick={() => setActiveTab('home')}>Home</button>
           <button onClick={() => setActiveTab('patients')}>Patients</button>
           <button onClick={() => setActiveTab('appointments')}>Appointments</button>
+          <button onClick={() => setActiveTab('chat')}>Chat</button>
           <button 
             onClick={() => {
               localStorage.removeItem('authToken');
@@ -202,6 +219,28 @@ const [editForm, setEditForm] = useState({
 
       {/* Main Content */}
       <div className="main-content">
+      {activeTab === 'chat' && doctor && (
+  <div className="page-container">
+    <h2>💬 Chat with Patients</h2>
+    <div className="chat-section" style={{ display: 'flex', height: '70vh' }}>
+      <ChatInbox
+        users={chatPatients}
+        onSelectUser={setSelectedChatPatient}
+        selectedUserId={selectedChatPatient?._id || null}
+      />
+      {selectedChatPatient && (
+        <ChatWindow
+          currentUserId={doctorId}
+          selectedUser={selectedChatPatient}
+        />
+      )}
+    </div>
+
+    <div style={{ marginTop: "30px" }}>
+      <DoctorGroupChat doctorId={doctorId} />
+    </div>
+  </div>
+)}
         {activeTab === 'home' && (
           <>
             <h1>Doctor Dashboard</h1>
@@ -376,6 +415,9 @@ const [editForm, setEditForm] = useState({
             </div>
           </>
         )}
+
+o
+
 
         {/* Patients Tab */}
         {activeTab === 'patients' && (

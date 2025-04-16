@@ -6,6 +6,9 @@ import ManagePackages from "./ManagePackages";
 import SubscribedPatients from "./SubscribedPatients";
 import PublishCovidArticles from "./PublishCovidArticles";
 import Statistics from "./Statistics";
+import ChatInbox from './ChatInbox';
+import ChatWindow from './ChatWindow';
+import socket from "../utils/socket";
 
 
 function InsuranceProviderDashboard() {
@@ -14,6 +17,9 @@ function InsuranceProviderDashboard() {
   const [provider, setProvider] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("manage-packages");
+  const [chatPatients, setChatPatients] = useState<any[]>([]);
+  const [selectedChatPatient, setSelectedChatPatient] = useState<any | null>(null);
+  const insuranceProviderId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchProvider = async () => {
@@ -32,6 +38,24 @@ function InsuranceProviderDashboard() {
 
     fetchProvider();
   }, [id, navigate]);
+
+  useEffect(() => {
+    if (!provider?._id) return;
+  
+    socket.connect();
+    socket.emit("register", provider._id);
+  
+    axios
+      .get(`http://localhost:5002/api/insurance-provider/${provider._id}/subscribed-patients`)
+      .then((res) => setChatPatients(res.data.patients || []))
+      .catch(console.error);
+  
+    return () => {
+      socket.disconnect(); // ✅ Wrapped in a void function
+    };
+  }, [provider?._id]);
+  
+  
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -63,6 +87,7 @@ function InsuranceProviderDashboard() {
           <button onClick={() => setActiveTab('manage-packages')}>Manage Insurance Packages</button>
           <button onClick={() => setActiveTab('subscribed-patients')}>View Subscribed Patients</button>
           <button onClick={() => setActiveTab('publish-articles')}>Publish COVID-19 Articles</button>
+          <button onClick={() => setActiveTab('chat')}>Chat</button>
           <button onClick={() => setActiveTab('statistics')}>View Statistics</button>
           <button onClick={handleLogout}>Logout</button>
         </nav>
@@ -86,6 +111,22 @@ function InsuranceProviderDashboard() {
 
 {activeTab === "statistics" && (
   <Statistics />
+)}
+
+{activeTab === 'chat' && (
+  <div style={{ display: "flex", height: "70vh" }}>
+    <ChatInbox
+      users={chatPatients}
+      onSelectUser={setSelectedChatPatient}
+      selectedUserId={selectedChatPatient?._id || null}
+    />
+    {selectedChatPatient && provider?._id && (
+  <ChatWindow
+    currentUserId={provider._id}
+    selectedUser={selectedChatPatient}
+  />
+)}
+  </div>
 )}
       </div>
     </div>
