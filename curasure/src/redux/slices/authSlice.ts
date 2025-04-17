@@ -74,10 +74,9 @@ const getUserData = () => {
 const initialState = {
   user: getUserData(),
   token: localStorage.getItem('token') || null,
-  role: '',
   siteKey: '',
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
-  error: null,
+  error: '',
   success: false,
 };
 
@@ -90,13 +89,12 @@ const authSlice = createSlice({
       localStorage.removeItem('userData');
       state.user = null;
       state.token = null;
-      state.role = '';
       state.status = 'idle';
-      state.error = null;
+      state.error = '';
       state.success = false;
     },
     clearError: (state) => {
-      state.error = null;
+      state.error = '';
     },
     clearSuccess: (state) => {
       state.success = false;
@@ -105,22 +103,21 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Login cases
-      .addCase(loginUser.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-        state.success = false;
-      })
+      // .addCase(loginUser.pending, (state) => {
+      //   state.status = 'loading';
+      //   state.error = '';
+      //   state.success = false;
+      // })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.role = action.payload.role;
         state.success = true;
-        state.error = null;
+        state.error = '';
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
-        //state.error = action.payload || "Login failed";;
+        state.error = 'Invalid email, password or role!';
         state.success = false;
       })
       // Site key cases
@@ -130,8 +127,8 @@ const authSlice = createSlice({
       .addCase(fetchSiteKey.fulfilled, (state, action) => {
         state.siteKey = action.payload;
       })
-      .addCase(fetchSiteKey.rejected, (state, action) => {
-        //state.error = action.payload.error;
+      .addCase(fetchSiteKey.rejected, (state) => {
+        state.error = 'Invalid captcha!';
       });
   },
 });
