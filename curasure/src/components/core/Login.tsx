@@ -123,6 +123,9 @@ function LoginPage() {
   };
 
   return (
+    <><div className="login-header"
+    style={{ cursor: 'pointer' }}
+    onClick={() => navigate("/")}>CuraSure</div>
     <div className="login-container">
       <div className="login-box">
         <h2 className="login-title">Login</h2>
@@ -137,8 +140,7 @@ function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="login-input"
-            required
-          />
+            required />
 
           <input
             type="password"
@@ -146,8 +148,7 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             className="login-input"
-            required
-          />
+            required />
 
           <select
             value={role}
@@ -166,8 +167,7 @@ function LoginPage() {
               <ReCAPTCHA
                 ref={recaptchaRef}
                 sitekey={siteKey}
-                onChange={handleCaptchaChange}
-              />
+                onChange={handleCaptchaChange} />
             </div>
           )}
 
@@ -185,7 +185,7 @@ function LoginPage() {
           <p className="newUserText">New user? <a href="/curasure/register" className="register-link">Register here</a></p>
         </div>
       </div>
-    </div>
+    </div></>
   );
 }
 

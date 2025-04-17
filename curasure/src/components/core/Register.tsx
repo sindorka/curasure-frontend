@@ -135,9 +135,12 @@ function Register() {
   };
 
   return (
+    <><div className="header"
+    style={{ cursor: 'pointer' }}
+    onClick={() => navigate("/")}>CuraSure</div>
     <div className="register-container">
-      <div className="card">
-        <h2 className="title">Create An Account</h2>
+      <div className="register-box">
+        <h2 className="title">Register</h2>
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
         <form onSubmit={handleRegister} className="register-form">
@@ -147,8 +150,7 @@ function Register() {
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
-            />
+              required />
           </div>
 
           <div className="input-group">
@@ -157,8 +159,7 @@ function Register() {
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+              required />
           </div>
 
           <div className="input-group">
@@ -167,8 +168,7 @@ function Register() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+              required />
           </div>
 
           <div className="input-group">
@@ -195,7 +195,7 @@ function Register() {
           </p>
         </form>
       </div>
-    </div>
+    </div></>
   );
 }
 
