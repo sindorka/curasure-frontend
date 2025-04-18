@@ -1,145 +1,210 @@
-#root {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Body and Root Styles */
+/* ---------- base ------------------------------------------------------- */
+body,html{
+  margin:0;
+  padding:0;
+  font-family:Arial,
+  Helvetica,sans-serif;
+  overflow-x:hidden
 }
 
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  margin: 0;
-  padding: 0;
-  color: #000000;
+body.light-theme{
+  background:#fff;
+  color:#000
 }
 
-/* App.css or Layout.css */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px; /* Adjust padding */
-  height: 60px;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(56, 54, 54, 0.1);
+body.dark-theme {
+  background:#121212;
+  color:#fff
 }
 
-.navbar-left {
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 0; /* 🛠️ No margin left */
+/* ---------- NAVBAR ----------------------------------------------------- */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1000;
+  padding:10px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#0b103d;
+  box-shadow:0 2px 4px rgba(0,0,0,.15)
+  
+}
+body.dark-theme .navbar{
+  background:#333
 }
 
-/* Optional: Make sure no unwanted elements inside navbar on dashboards */
-.navbar-container,
-.navbar-menu,
-.navbar-right {
-  display: flex;
-  align-items: center;
+.navbar-left{
+  color: #fff;
+  font-weight:bold;
+  font-size:30px;
+  
+}
+
+.navbar-menu{
+  display:flex;
+  gap:30px;
+  list-style:none;
+  margin:0;
+  color: #fff;
+}
+.nav-item{
+  padding:10px 20px;
+  border-radius:15px;
+  cursor:pointer;
+  color:#fff;
+  transition:.3s
+}
+.nav-item:hover,.nav-item.active{
+  background:#333
+}
+body.light-theme .nav-item{
+  color: #fff;
+}
+body.dark-theme .nav-item:hover{
+  background:#b9adad;
+}
+.navbar-right{
+  display:flex;
+  align-items:center;
+  gap:18px
+}
+
+/* ---------- LOGIN BUTTON ---------------------------------------------- */
+.login-btn{
+  padding:10px 18px;
+  font-size:1rem;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff;
+  background:#0b103d;
+  transition:.3s
+}
+body.dark-theme .login-btn{
+  background:#b9adad;
+}
+
+/* ---------- PILL TOGGLE ------------------------------------------------ */
+.switch{
+  position:relative;
+  width:165px;
+  height:48px
+  
+}
+.switch input{
+  opacity:0;
+  width:0;
+  height:0
+}
+
+.slider{
+  position:absolute;
+  inset:0;
+  border-radius:999px;
+  background:#e5e5e5;
+  color:#2b2b2b;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding:35px 12px 0 50px;
+  transition:.4s
+}
+.slider::before{              /* knob */
+  content:"☀️";
+  position:absolute;
+  left:-4px;
+  top:0px;
+  height:35px;
+  width:36px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  transition:.4s
+}
+.slider::after{               /* text */
+  
+  position:relative;
+  left: 50px;;
+  transition:.4s;
+  
+}
+
+/* ---- checked = night -------------------------------------------------- */
+input:checked + .slider{
+  background:#202020;
+  color:#fff;
+  justify-content:flex-end;
+  padding:35px 12px 0 50px;
 }
 
 
-
-
-.nav-item {
-  font-size: 1rem;
-  color: #aaa;
-  cursor: pointer;
-  padding: 10px 20px;
-  border-radius: 15px;
-  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+input:checked + .slider::before{
+  content:"🌙";
+  transform:translateX(116px);
+  left:-90px;
+  height:35px;
+  width:35px;
+  
 }
-
-.nav-item:hover,
-.nav-item.active {
-  background-color: #333;
-  color: white;
+input:checked + .slider::after{
+  
+  left:-94px
 }
-
-/* Login Button with Smooth Blue Fade Effect */
-.login-btn {
-  background-color: hsl(234, 67%, 31%);
-  ;
-  /* Faded initial blue */
-  color: white;
-  border: 1px solid rgba(14, 20, 74, 0.5);
-  /* Soft blue border */
-  padding: 10px 15px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: background 0.4s ease-in-out, border 0.4s ease-in-out, transform 0.2s ease-in-out;
-}
-
-/* Darker Blue on Hover */
-.login-btn:hover {
-  background-color: #090c2b;
-  /* More visible blue */
-  border: 1px solid rgba(11, 16, 61, 1);
-}
-
-/* Fully Dark Blue on Click */
-.login-btn:active {
-  background-color: #090c2b;
-  /* Full blue */
-  border: 1px solid #0b103d;
-  transform: scale(0.95);
-  /* Slight shrink effect */
+/* Section Styling */
+.section-container {
+  margin-top: 80px; /* Offset for fixed navbar */
 }
 
 /* Hero Section */
-/* Hero Section - Full Screen Below Navbar */
 .hero-container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  height: calc(100vh 50px);
-  /* Full height minus navbar */
-  width: 100%;
-  padding: 0 -10%;
-  /* Adjusted left padding */
-  margin-left: 5%;
+  height: calc(100vh - 60px); /* Adjust for navbar */
+  padding: 0 5%;
+  margin-top: 60px; /* Offset for fixed navbar */
 }
 
-/* Left Side - Text */
+.hero-image img {
+  width: 1000px; /* Adjust as needed */
+  max-width: 200%;
+  height: auto;
+}
 .hero-text {
   max-width: 45%;
   text-align: left;
-  margin-top: 50px;
 }
-
+body.dark-theme .hero-text h1 {
+  color: rgb(254, 254, 254);
+}
 .hero-text h1 {
   font-size: 2.8rem;
   color: #0b103d;
   margin-bottom: 15px;
-  font-weight: bold;
-  line-height: 1.2;
-  text-align: left;
-  white-space: nowrap;
 }
 
 .hero-text .highlight {
-  display: block;
   font-size: 3rem;
-  margin-top: 5px;
-  /* Adds spacing between "Technology" */
 }
 
 .hero-text p {
   font-size: 1.2rem;
   color: #555;
   margin-bottom: 20px;
-  line-height: 1.5;
-  text-align: left;
 }
 
 /* Register Button */
 .register-btn {
-  background-color: hsl(234, 67%, 31%);
+  background-color: #1e2a47; /* Dark Blue */
   color: white;
   border: none;
   padding: 12px 20px;
@@ -147,417 +212,127 @@ html, body {
   font-size: 1rem;
   cursor: pointer;
   border-radius: 8px;
-  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+  transition: background 0.3s ease-in-out;
 }
-
+body.dark-theme .register-btn {
+  background-color: #b9adad;
+}
 .register-btn:hover {
   background-color: #050a2e;
 }
 
-.register-btn:active {
-  transform: scale(0.95);
-}
-
-/* Hide CTA by default */
-.cta-text {
-  display: none;
-  font-size: 14px;
-  color: #0b103d;
-  margin-top: 10px;
-  text-align: center;
-  transition: opacity 0.3s ease-in-out;
-}
-
-/* Show CTA when hovering over the register button */
-.register-btn:hover+.cta-text {
-  display: block;
-  opacity: 1;
-}
-
-
-/* Right Side - Image */
-.hero-image {
-  display: flex;
-  justify-content: right;
-  right: 400px;
-  margin-top: 10px;
-}
-
-.hero-image img {
-  width: 800px;
-  max-width: 800px;
-}
-
-/* Section Container */
-/* .section-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 100px 50px;
-  margin-top: 60px;
-
-} */
-
-.hero-features {
-  margin-top: 15px;
-  padding-left: 20px;
-  list-style-type: none;
-}
-
-.hero-features li {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.hero-features li::before {
-  content: "✔";
-  color: #0b103d;
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-/* About Section - Full Page Layout */
+/* About Section */
 .about-section {
-  width: 80%;
+  width: 100%;
   margin: auto;
+  padding: 80px 50px;
+  margin-top: 60px;
+  background-color: #BDC3C7;
   text-align: center;
-  padding: 80px 20px;
-  ;
-  position: relative;
-
-  margin-bottom: 100px;
-  z-index: 2;
 }
-
-/* Grid Layout */
+body.dark-theme .about-section{
+  color: black;
+  background-color: #fff;
+}
 .about-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
   gap: 30px;
-  margin-top: -170px;
+  margin-top: 20px;
 }
-
-/* Individual Cards */
 .about-card {
   background: #0b103d;
   padding: 20px;
   border-radius: 10px;
+  color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: left;
-  transition: all 0.3s ease-in-out;
-  color: #f6f5f5;
-  position: relative;
-  margin-bottom: 30px;
 }
 
 .about-card:hover {
   transform: translateY(-10px);
-  /* Slight lift effect */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  /* Enhanced shadow */
-  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(12, 12, 12, 0.2);
 }
 
-/* About Footer */
 .about-footer {
   margin-top: 40px;
-  padding-top: 20px;
+  padding-top: 100px;
   border-top: 2px solid #0b103d;
-  color: #000;
 }
-
-
 
 /* Roles Section */
 .roles-section {
   width: 85%;
   margin: auto;
-  text-align: center;
   padding: 50px 0;
-}
+  margin-top: 60px;
+  text-align: center;
 
-/* Intro Text */
-.roles-intro {
-  font-size: 25px;
-  color: #343131;
-  margin-bottom: 35px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
-/* Grid Layout */
+body.dark-theme .roles-section h2 {
+  color: rgb(254, 254, 254);
+}
 .roles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
   gap: 30px;
   margin-top: 30px;
 }
 
-/* Individual Role Cards */
 .role-card {
   background: #0b103d;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  color: white;
   text-align: left;
 }
 
 .role-card:hover {
   transform: translateY(-10px);
-  /* Slight lift effect */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  /* Enhanced shadow */
-  cursor: pointer;
 }
 
-.role-card h3 {
-  margin-bottom: 10px;
-}
-
-.role-card ul {
-  padding-left: 20px;
-}
-
-.role-card li {
-  font-size: 1rem;
-  color: #e5dfdf;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-}
-
-.role-card li::before {
-  content: "✔";
-  color: #f1f1f3;
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-/* Join Buttons */
-.role-card button {
-  background: hsl(234, 67%, 31%);
+/* Contact Footer */
+.contact-footer {
+  background-color: #0b103d;
   color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  margin-top: 15px;
-  margin-left: 115px;
-}
-
-.role-card button:hover {
-  background: #090c2b;
-}
-
-/* Footer */
-.roles-footer {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 2px solid #070606;
-}
-
-/* Contact Section */
-.contact-page {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 120px 5%;
-  gap: 90px;
-}
-
-.contact-image {
-  flex: 0.7;
-}
-
-.contact-image.left {
-  flex: 0.7;
-  display: flex;
-  justify-content: flex-end;
-  /* Push it more to the right */
-  margin-right: 50px;
-  /* Increase spacing from the contact details */
-
-}
-
-.contact-image img {
-  max-width: 450px;
-  /* Adjust image size */
-  height: auto;
-}
-
-.contact-image.right {
-  flex: 0.7;
-  display: flex;
-  justify-content: flex-end;
-  /* Push it more to the right */
-  margin-left: 50px;
-  /* Increase spacing from the contact details */
-  margin-bottom: 150px;
-}
-
-.contact-image.right img {
-  max-width: 250px;
-  /* Adjust image size if needed */
-  height: auto;
-}
-
-.contact-section {
-  width: 80%;
-  margin: auto;
-  text-align: center;
-  padding: 50px 0;
-}
-
-/* Contact Layout */
-.contact-container {
+  padding: 50px 10%;
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  align-items: center;
+  margin-top: 100px;
 }
-
-/* Contact Form */
-.contact-form {
-  width: 80%;
-  background: #0b103d;
-  padding: 80px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  margin-left: -100px;
-  margin-top: -100px;
+body.dark-theme .contact-footer{
+  background:#333
 }
-
-.contact-form h3 {
-  margin-bottom: 10px;
-}
-
-.contact-form label {
-  display: block;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.contact-form button {
-  background: hsl(234, 67%, 31%);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  margin-top: 25px;
-
-}
-
-.contact-form button:hover {
-  background: #090c2b;
-
-}
-
-/* Contact Info */
-.contact-info {
-  width: 50%;
-  text-align: left;
-  color: #000;
-  margin-top: -100px;
-  margin-right: -100px;
-  ;
-}
-
-.contact-info h3 {
-  margin-top: 15px;
-}
-
-/* Social Links */
-/* Social Links */
-.social-links {
-  margin-top: 10px;
+.footer-info {
   display: flex;
-  gap: 15px;
+  gap: 40px; /* Adjust space between the elements */
 }
 
-.social-links a {
-  color: #0b103d;
-  /* Dark Blue */
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-item span {
+  font-size: 1rem;
+}
+
+/* For the social links */
+.footer-social {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-social a {
+  color: white;
   transition: transform 0.2s ease-in-out;
 }
 
-.social-links a:hover {
+.footer-social a:hover {
   transform: scale(1.2);
   color: #004aad;
-  /* Bright Blue */
-}
-
-
-/* Fade Animation */
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 300ms;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
