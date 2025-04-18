@@ -8,7 +8,9 @@ const RolesSection: React.FC = () => {
 
   return (
     <div className="roles-section">
+      <h2>Join the CuraSure Community</h2>
       <p className="roles-intro">
+      
         Whether you're a <strong>patient, doctor, or insurance provider</strong>, CuraSure
         offers specialized features to make healthcare and insurance management seamless.
       </p>
@@ -26,7 +28,7 @@ const RolesSection: React.FC = () => {
             <li>Get AI-based insurance recommendations</li>
             <li>Track medical expenses &amp; claim status</li>
           </ul>
-          <button onClick={() => handleJoin('Patient')}>Join as Patient</button>
+         
         </div>
 
         <div className="role-card">
@@ -41,7 +43,7 @@ const RolesSection: React.FC = () => {
             <li>Collaborate with insurance providers</li>
             <li>AI-powered patient analytics</li>
           </ul>
-          <button onClick={() => handleJoin('Doctor')}>Join as Doctor</button>
+          
         </div>
 
         <div className="role-card">
@@ -56,7 +58,7 @@ const RolesSection: React.FC = () => {
             <li>AI-driven fraud detection</li>
             <li>Secure patient-insurance documentation</li>
           </ul>
-          <button onClick={() => handleJoin('Provider')}>Join as Provider</button>
+         
         </div>
       </div>
 

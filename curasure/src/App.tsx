@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { useState, useRef, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HeroSection from './components/core/HeroSection';
 import AboutSection from './components/core/AboutSection';
 import RolesSection from './components/core/RolesSection';
 import ContactSection from './components/core/ContactSection';
 import './App.css';
-import { ToastContainer } from 'react-toastify'; // ✅ already imported
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AppRoutes from './Routes';
@@ -16,8 +15,25 @@ type SectionKey = 'hero' | 'about' | 'roles' | 'contact';
 
 const App = () => {
   const [activeSection, setActiveSection] = useState<SectionKey>('hero');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // Update body class when theme is toggled
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+      document.body.classList.remove('dark-theme');
+    }
+  }, [isDarkMode]);
 
   // Map section names to React elements
   const sections: Record<SectionKey, React.ReactNode> = {
@@ -29,20 +45,22 @@ const App = () => {
 
   const handleNavClick = (section: SectionKey) => {
     setActiveSection(section);
+    // Smooth scroll to the clicked section
+    document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleLogin = () => {
     navigate("/login");
-  }
+  };
 
   return (
     <>
-      {/* 👇 Wrap your Routes inside Fragment */}
       <Routes>
         <Route
           path="/"
           element={
             <div className="App">
+              {/* Fixed Navbar */}
               <nav className="navbar">
                 <div className="navbar-left">CuraSure</div>
                 <div className="navbar-container">
@@ -53,23 +71,31 @@ const App = () => {
                     <li onClick={() => handleNavClick('contact')} className={`nav-item ${activeSection === 'contact' ? 'active' : ''}`}>Contact</li>
                   </ul>
                 </div>
+                
+                <div className="theme-toggle">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={isDarkMode}
+                        onChange={toggleDarkMode}
+                      />
+                      <span className="slider round"></span>
+                    </label>
+                    
+                  </div>
                 <div className="navbar-right">
-                  <button className="login-btn" onClick={handleLogin}>
-                    Log In
-                  </button>
+                  {/* Dark/Light Mode Toggle */}
+                
+                  <button className="login-btn" onClick={handleLogin}>Log In</button>
                 </div>
               </nav>
 
               <div className="section-container">
-                <CSSTransition
-                  in={true}
-                  nodeRef={nodeRef}
-                  timeout={300}
-                  classNames="fade"
-                  unmountOnExit
-                >
-                  <div ref={nodeRef}>{sections[activeSection]}</div>
-                </CSSTransition>
+                {/* Sections will be rendered here */}
+                <div id="hero">{sections['hero']}</div>
+                <div id="about">{sections['about']}</div>
+                <div id="roles">{sections['roles']}</div>
+                <div id="contact">{sections['contact']}</div>
               </div>
             </div>
           }
@@ -77,7 +103,7 @@ const App = () => {
         <Route path="/*" element={<AppRoutes />} />
       </Routes>
 
-      {/* 👇 ADD TOASTCONTAINER ONCE HERE */}
+      {/* Toast Container for notifications */}
       <ToastContainer />
     </>
   );
