@@ -438,7 +438,8 @@ const openEdit = (section: typeof editSection) => {
   {activeTab === 'profile' && patient && (
     <>
       {/* GRID WRAPPER */}
-      <div className="profile-grid">
+      <div className="profile-grid two column">
+       <div className="left-col">
 
         {/* ─────────── CARD 1 – PROFILE ─────────── */}
         <div className="card profile-card-ui">
@@ -479,7 +480,8 @@ const openEdit = (section: typeof editSection) => {
             Edit
           </button>
         </div>
-
+        </div>
+        <div className="right-col">
         {/* ─────────── CARD 2 – COVID ─────────── */}
         <div className="card covid-card-ui">
           <h4 className="section-title">COVID‑19 Information</h4>
@@ -519,6 +521,9 @@ const openEdit = (section: typeof editSection) => {
           </button>
         </div>
       </div>
+      </div>
+
+      {/* ─────────── CARD 5 – APPOINTMENTS ─────────── */}
 
       {/* ─────────── MINI‑MODAL (re‑uses your editForm + save handler) ─────────── */}
       {showEditProfileModal && editSection && (

@@ -645,7 +645,162 @@
   font-weight: 600;
   color: #0b103d;
 }
+.profile-grid.two-column {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  padding: 2rem 0;
+}
 
+/* Left column holds only the big profile card */
+.profile-grid.two-column .left-col {
+  flex: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right column stacks the other three cards with plenty of space */
+.profile-grid.two-column .right-col {
+  flex: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Make every card fill its column’s width */
+.profile-grid.two-column .left-col .card,
+.profile-grid.two-column .right-col .card {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── ENLARGE & RE‑STYLE THE PROFILE CARD ───────────────── */
+
+/* Extra padding and max‑width on the profile card itself */
+.profile-grid.two-column .left-col .profile-card-ui {
+  max-width: 600px;
+  padding: 3rem 2.5rem;
+}
+
+/* Bigger avatar */
+.profile-card-ui .card-header img {
+  width: 180px;
+  height: 180px;
+}
+
+/* Bigger name */
+.profile-card-ui .card-header h3 {
+  font-size: 2.25rem;
+  margin-top: 0.75rem;
+}
+
+/* Larger detail lines (phone / address / age / gender) */
+.profile-card-ui .card-body li {
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+/* Larger “Change Photo” button */
+.profile-card-ui .avatar-actions .change-btn {
+  padding: 1rem 1.75rem;
+  font-size: 1.1rem;
+}
+
+/* ─── RETAIN YOUR EXISTING CARD STYLING BELOW ─────────────────
+   (boxes, shadows, edit‑buttons, etc.)
+─────────────────────────────────────────────────────────────── */
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(11,16,61,0.08);
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(11,16,61,0.12);
+}
+
+/* Shared header & body */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.card-body {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.75rem;
+  line-height: 1.55;
+}
+.card-body li + li,
+.card-body p + p {
+  margin-top: .35rem;
+}
+.card-body strong {
+  font-weight: 600;
+  color: #0b103d;
+}
+
+/* Edit pill */
+.edit-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #1f2665;
+  color: #fff;
+  border: 0;
+  font-size: .75rem;
+  padding: .45rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .25s ease;
+}
+.edit-btn:hover {
+  background: #161d66;
+}
+
+/* Section titles */
+.section-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #0b103d;
+  text-align: center;
+  margin-bottom: .75rem;
+  position: relative;
+}
+.section-title::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 1px;
+  background: #e9ecf8;
+  margin: .6rem auto 0;
+}
+
+/* Avatar actions */
+.avatar-actions {
+  display: flex;
+  justify-content: center;
+  gap: .35rem;
+  margin-top: .6rem;
+}
+.change-btn,
+.delete-btn {
+  border: 0;
+  font-size: .68rem;
+  padding: .35rem .9rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.change-btn { background: #dfe1f7; color: #0b103d; }
+.change-btn:hover { background: #cbd0f4; }
+.delete-btn { background: #ffebe8; color: #d13639; }
+.delete-btn:hover { background: #ffdedd; }
 /* List & paragraphs inside cards */
 .card-body {
   list-style: none;
@@ -706,7 +861,7 @@
   display: flex;
   justify-content: center;
   gap: 0.35rem;
-  margin-top: 0.6rem;
+  margin-top: rem;
 }
 
 .change-btn,
@@ -849,6 +1004,9 @@
   box-shadow: 0 12px 32px rgba(11, 16, 61, 0.12);
 }
 
+.profile-card-ui{
+  margin-top: 100rem;
+}
 /* Header of the profile card */
 .profile-card-ui .card-header {
   display: flex;
@@ -1227,4 +1385,67 @@
 }
 .cancel-btn:hover {
   background-color: #c0392b;
+}
+/*──────────────────────────────────────────────────────────────
+  PROFILE PAGE LAYOUT & SIZING OVERRIDES
+──────────────────────────────────────────────────────────────*/
+
+/* 1. Two‑column container: center both columns, increase spacing */
+.profile-grid.two.column {
+  display: flex;
+  justify-content: center;  /* center the two columns in the page */
+  gap: 4rem;                 /* increase horizontal gap between columns */
+  padding: 3rem 0;           /* add more vertical breathing room */
+}
+
+/* 2. Left column (Profile card) */
+.profile-grid.two.column .left-col {
+  flex: 0 0 50%;
+  display: flex;
+  justify-content: center;  /* center the profile card horizontally */
+  align-items: flex-start;  /* align it to the top of the column */
+}
+
+/* 3. Right column (the other three cards stacked) */
+.profile-grid.two.column .right-col {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;                 /* increase vertical gap between each card */
+}
+
+/* 4. Force all cards to fill their column width */
+.profile-grid.two.column .left-col .card,
+.profile-grid.two.column .right-col .card {
+  width: 100%;
+}
+
+/* 5. Make the profile card extra roomy */
+.profile-grid.two.column .left-col .profile-card-ui {
+  max-width: 600px;
+  padding: 3.5rem 2.5rem;
+}
+
+/* 6. Enlarge the avatar in the profile card */
+.profile-card-ui .card-header img {
+  width: 400px;
+  height: 400px;
+}
+
+/* 7. Enlarge the user’s name */
+.profile-card-ui .card-header h3 {
+  font-size: 3.5rem;
+  margin-top: 1rem;
+}
+
+/* 8. Enlarge the contact/age/gender lines */
+.profile-card-ui .card-body li {
+  font-size: 1.3rem;
+  line-height: 1.6;
+}
+
+/* 9. Enlarge the “Change Photo” button */
+.profile-card-ui .avatar-actions .change-btn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
 }
