@@ -4,7 +4,7 @@ import axios from "axios";
 function ViewCovidArticles() {
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [selected, setSelected] = useState<any>(null);
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -28,24 +28,34 @@ function ViewCovidArticles() {
       {articles.length === 0 ? (
         <p>No articles found.</p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div className="article-grid">
           {articles.map((article) => (
             <div
               key={article._id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "1rem",
-                backgroundColor: "#f9f9f9",
-              }}
+             className="article-card"
+             onClick={() => setSelected(article)}
             >
-              <h3 style={{ marginBottom: "0.5rem", color: "#2c3e50" }}>{article.title}</h3>
-              <p style={{ whiteSpace: "pre-line", lineHeight: "1.6" }}>{article.content}</p>
-              <p style={{ fontSize: "0.9rem", color: "#7f8c8d" }}>
-                Published on: {new Date().toLocaleDateString()}
+              <h3 className="article-title">{article.title}</h3>
+              <p className="article-excerpt">{article.content.length > 120 ? article.content.slice(0, 120).trim() + "..." : article.content} </p>
+              <p className="article-date">
+                Published on: {new Date(article.publishedAt || article.createdAt).toLocaleDateString()}
               </p>
             </div>
           ))}
+        </div>
+      )}
+      {selected && (
+        <div className="modal-overlay" onClick={() => setSelected(null)}>
+          <div className="modal-container" onClick={e => e.stopPropagation()}>
+            <h2 className="article-title">{selected.title}</h2>
+            <p className="article-full">{selected.content}</p>
+            <button 
+              className="cancel-btn" 
+              onClick={() => setSelected(null)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

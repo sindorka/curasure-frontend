@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./PatientDashboard.css";
 
 interface InsurancePackage {
   _id: string;
@@ -109,50 +110,43 @@ function InsuranceTab({ patientId }: { patientId: string }) {
       {packages.length === 0 ? (
         <p>No packages available right now.</p>
       ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ backgroundColor: "#f2f2f2" }}>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Package Name</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Coverage</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Price ($)</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Provider</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
+        
+          <div className="package-grid">
             {packages.map((pkg) => {
               const subscribed = isSubscribed(pkg.providerId._id, pkg._id);
               return (
-                <tr key={pkg._id}>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>{pkg.packageName}</td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>{pkg.type}</td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>{pkg.price}</td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                    {pkg.providerId.name} ({pkg.providerId.companyName})
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                <div key={pkg._id} className="package-card">
+                   <h3 className="pkg-name">{pkg.packageName}</h3>
+                   <ul className="pkg-details">
+                   <li><strong>Coverage:</strong>{pkg.type}</li>
+                   <li><strong>Price:</strong>{pkg.price}</li>
+                   <li>
+                   <strong>Provider:</strong><br />
+                    {pkg.providerId.name} <span className="company">({pkg.providerId.companyName})</span>
+                  </li>
+                   </ul>
+          
                   {subscribed ? (
-  <button
+  <button className="pkg-btn unsubscribe"
     onClick={() => handleUnsubscribe(pkg.providerId._id, pkg._id)}
-    style={{ backgroundColor: "#e74c3c", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer" }}
+    
   >
     Unsubscribe
   </button>
 ) : (
-  <button
+  <button className="pkg-btn subscribe"
     onClick={() => handleSubscribe(pkg.providerId._id, patientId, pkg._id, pkg.price)}
-    style={{ backgroundColor: "#2ecc71", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer" }}
+    
   >
     Subscribe
   </button>
 )}
 
-                  </td>
-                </tr>
+                </div>
               );
             })}
-          </tbody>
-        </table>
+          </div>
+        
       )}
     </div>
   );
