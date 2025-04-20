@@ -84,11 +84,11 @@ function InsuranceProviderDashboard() {
           CuraSure
         </div>
         <nav>
-          <button onClick={() => setActiveTab('manage-packages')}>Manage Insurance Packages</button>
-          <button onClick={() => setActiveTab('subscribed-patients')}>View Subscribed Patients</button>
-          <button onClick={() => setActiveTab('publish-articles')}>Publish COVID-19 Articles</button>
+          <button onClick={() => setActiveTab('manage-packages')}>Manage Packages</button>
+          <button onClick={() => setActiveTab('subscribed-patients')}>Subscribed Patients</button>
+          <button onClick={() => setActiveTab('publish-articles')}>COVID-19 Articles</button>
           <button onClick={() => setActiveTab('chat')}>Chat</button>
-          <button onClick={() => setActiveTab('statistics')}>View Statistics</button>
+          <button onClick={() => setActiveTab('statistics')}>Statistics</button>
           <button onClick={handleLogout}>Logout</button>
         </nav>
       </div>

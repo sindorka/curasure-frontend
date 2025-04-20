@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./InsuranceProviderDasboard.css";
 
 function ManagePackages({ providerId }: { providerId: string }) {
   const [packages, setPackages] = useState<any[]>([]);
@@ -79,11 +80,11 @@ function ManagePackages({ providerId }: { providerId: string }) {
   
 
   return (
-    <div>
+    <div className="manage-packages">
       <h2>📦 Manage Insurance Packages</h2>
 
       {/* Create Package Form */}
-      <div style={{ marginBottom: "20px" }}>
+      <div className="package-form">
         <input
           type="text"
           placeholder="Package Name"
@@ -120,53 +121,48 @@ function ManagePackages({ providerId }: { providerId: string }) {
       </div>
 
       {/* Package List */}
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ backgroundColor: "#f2f2f2" }}>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Package Name</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Description</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Price</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Type</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="packages-grid">
   {packages.map((pkg) => (
-    <tr key={pkg._id}>
+    <div key={pkg._id} className="package-card">
       {editingId === pkg._id ? (
         <>
-          <td><input value={editData.packageName} onChange={(e) => setEditData({ ...editData, packageName: e.target.value })} /></td>
-          <td><input value={editData.description} onChange={(e) => setEditData({ ...editData, description: e.target.value })} /></td>
-          <td><input type="number" value={editData.price} onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })} /></td>
-          <td>
-            <select value={editData.type} onChange={(e) => setEditData({ ...editData, type: e.target.value })}>
+          <input className="card-input" value={editData.packageName} onChange={(e) => setEditData({ ...editData, packageName: e.target.value })} />
+          <textarea
+                  className="card-input"
+                  value={editData.description}
+                  onChange={e => setEditData({ ...editData, description: e.target.value })}
+                />
+    
+          <input  className="card-input price-input" type="number" value={editData.price} onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })} />
+          
+            <select className="card-input type-select" value={editData.type} onChange={(e) => setEditData({ ...editData, type: e.target.value })}>
               <option value="Basic">Basic</option>
               <option value="Premium">Premium</option>
               <option value="VIP">VIP</option>
             </select>
-          </td>
-          <td>
+            <div className="card-actions">
             <button onClick={() => handleSaveEdit(pkg._id)}>✅ Save</button>
             <button onClick={() => setEditingId(null)}>❌ Cancel</button>
-          </td>
+            </div>
         </>
       ) : (
         <>
-          <td>{pkg.packageName}</td>
-          <td>{pkg.description}</td>
-          <td>${pkg.price}</td>
-          <td>{pkg.type}</td>
-          <td>
+            <h3 className="pkg-name">{pkg.packageName}</h3>
+            <p className="pkg-desc">{pkg.description}</p>
+            <p className="pkg-price">${pkg.price}</p>
+            <p className="pkg-type">{pkg.type}</p>
+            <div className="card-actions">
             <button onClick={() => startEdit(pkg)}>✏️ Edit</button>
             <button onClick={() => handleDelete(pkg._id)}>🗑️ Delete</button>
-          </td>
+            </div>
         </>
       )}
-    </tr>
+    </div>
   ))}
-</tbody>
+      </div>
 
-      </table>
+     
+
     </div>
   );
 }
