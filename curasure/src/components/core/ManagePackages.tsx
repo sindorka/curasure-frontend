@@ -89,27 +89,23 @@ function ManagePackages({ providerId }: { providerId: string }) {
           type="text"
           placeholder="Package Name"
           value={newPackage.packageName}
-          onChange={(e) => setNewPackage({ ...newPackage, packageName: e.target.value })}
-          style={{ marginRight: "10px" }}
+          onChange={(e) => setNewPackage({ ...newPackage, packageName: e.target.value })}         
         />
         <input
           type="text"
           placeholder="Description"
           value={newPackage.description}
-          onChange={(e) => setNewPackage({ ...newPackage, description: e.target.value })}
-          style={{ marginRight: "10px" }}
+          onChange={(e) => setNewPackage({ ...newPackage, description: e.target.value })}         
         />
         <input
           type="number"
           placeholder="Price ($)"
           value={newPackage.price}
           onChange={(e) => setNewPackage({ ...newPackage, price: Number(e.target.value) })}
-          style={{ marginRight: "10px" }}
         />
         <select
           value={newPackage.type}
           onChange={(e) => setNewPackage({ ...newPackage, type: e.target.value })}
-          style={{ marginRight: "10px" }}
         >
           <option value="Basic">Basic</option>
           <option value="Premium">Premium</option>

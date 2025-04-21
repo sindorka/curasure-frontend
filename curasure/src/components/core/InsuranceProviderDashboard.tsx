@@ -95,7 +95,7 @@ function InsuranceProviderDashboard() {
 
       {/* Main Content */}
       <div className="main-content">
-        <h1>Welcome, {provider.name} 👋</h1>
+        <h1>Welcome, {provider.name}!</h1>
 
         {activeTab === "manage-packages" && (
   <ManagePackages providerId={provider._id} />
