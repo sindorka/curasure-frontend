@@ -82,6 +82,26 @@ const [editForm, setEditForm] = useState({
     comment: "",
   });
 
+  const [editSection, setEditSection] = useState<
+  'profile' | 'covid' | 'medical' | 'insurance' | null
+>(null);
+const openEdit = (section: typeof editSection) => {
+  setEditSection(section);
+  setShowEditProfileModal(true);           // <-- you already have this state
+  setEditForm({
+    contact:        patient.contact            ?? '',
+    address:        patient.address            ?? '',
+    age:            patient.age                ?? 0,
+    gender:         patient.gender             ?? '',
+    testedPositive: patient.testedPositive     ?? false,
+    testDate:       patient.testDate ? new Date(patient.testDate) : null,
+    symptoms:       patient.symptoms           ? patient.symptoms.join(', ')         : '',
+    medicalConditions: patient.medicalConditions ? patient.medicalConditions.join(', '): '',
+    insuranceCompany:  patient.insuranceCompany ?? '',
+    insuranceStatus:   patient.insuranceStatus  ?? '',
+    profilePicture:    patient.profilePicture   ?? '',
+  });
+};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -142,8 +162,14 @@ const [editForm, setEditForm] = useState({
         gender: editForm.gender,
         testedPositive: editForm.testedPositive,
         testDate: editForm.testDate ? new Date(editForm.testDate) : null,    // convert string to Date
-        symptoms: editForm.symptoms,  // already an array
-        medicalConditions: editForm.medicalConditions, // split into array
+        symptoms: editForm.symptoms
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),  // already an array
+        medicalConditions: editForm.medicalConditions
+        .split(',')
+        .map((c) => c.trim())
+        .filter(Boolean), // split into array
         insuranceCompany: editForm.insuranceCompany,
         insuranceStatus: editForm.insuranceStatus,
         profilePicture: editForm.profilePicture,
@@ -169,10 +195,12 @@ const [editForm, setEditForm] = useState({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        const base64 = reader.result as string;
         setEditForm((prev) => ({
           ...prev,
-          profilePicture: reader.result as string, // store base64 or URL
+          profilePicture: base64, // store base64 or URL
         }));
+        setPatient((prev: any) => ({ ...prev, profilePicture: base64 }));
       };
       reader.readAsDataURL(file);  // reads file as Base64
     }
@@ -371,7 +399,15 @@ const [editForm, setEditForm] = useState({
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
-      <div className="sidebar">
+      <div className="sidebar" style={{
+      position: 'fixed',
+      backgroundColor:'#0b103d',  /* keep it on screen */
+      top: 0,
+      left: 0,
+      bottom: 0,
+      width: 220,         /* whatever your sidebar width is */
+      zIndex: 900,        /* sits above scrolling content */
+    }}>
         <div 
           className="sidebar-logo"  
           style={{ cursor: 'pointer' }}
@@ -383,7 +419,7 @@ const [editForm, setEditForm] = useState({
           <button onClick={() => setActiveTab('profile')}>Profile</button>
           <button onClick={() => setActiveTab('doctors')}>Doctors</button>
           <button onClick={() => setActiveTab("insurance")}>Insurance</button>
-          <button onClick={() => setActiveTab("covid-articles")}>COVID-19 Articles</button>
+          <button onClick={() => setActiveTab("covid-articles")}>Articles</button>
           <button onClick={() => setActiveTab('chat')}>Chat</button>
           <button 
             onClick={() => {
@@ -397,247 +433,218 @@ const [editForm, setEditForm] = useState({
           </button>
         </nav>
       </div>
-
-      {/* Main Content */}
+<div className="page-body">
       <div className="main-content">
-      {activeTab === 'profile' && patient && (
-  <div className="profile-container">
-    <div className="profile-card">
-  {/* Top: Image and Name */}
-  <div className="profile-header">
-    <img 
-      key={patient?.profilePicture} 
-      src={patient?.profilePicture || defaultPatientImage}
-      alt="Profile"
-    />
-    <h2>{patient?.name || "N/A"}</h2>
-  </div>
+  {activeTab === 'profile' && patient && (
+    <>
+      {/* GRID WRAPPER */}
+      <div className="profile-grid two column">
+       <div className="left-col">
 
-  {/* Flex Grid */}
-  <div className="profile-info-grid">
-    {/* Left Section */}
-    <div className="left-section">
-      <p><strong>Phone:</strong> {patient?.contact?.trim() || "N/A"}</p>
-      <p><strong>Address:</strong> {patient?.address?.trim() || "Not Provided"}</p>
-      <p><strong>Age:</strong> {patient?.age || "N/A"}</p>
-      <p><strong>Gender:</strong> {patient?.gender?.trim() || "Not Specified"}</p>
-    </div>
+        {/* ─────────── CARD 1 – PROFILE ─────────── */}
+        <div className="card profile-card-ui">
+          <div className="card-header">
+            <img src={patient.profilePicture || defaultPatientImage} alt="profile" />
+            <h3>{patient.name || 'N/A'}</h3>
+          </div>
 
-    {/* Right Section */}
-    <div className="right-section">
-      <div className="section-title">COVID-19 Information</div>
-      <p><strong>Tested Positive:</strong> {patient?.testedPositive ? "Yes" : "No"}</p>
-      <p><strong>Symptoms:</strong> {patient?.symptoms?.length > 0 ? patient.symptoms.join(', ') : "None"}</p>
-      {patient?.testDate && (
-        <p><strong>Test Date:</strong> {new Date(patient.testDate).toLocaleDateString()}</p>
+          <ul className="card-body">
+            <li><strong>Phone:</strong> {patient.contact?.trim() || 'N/A'}</li>
+            <li><strong>Address:</strong> {patient.address?.trim() || 'Not Provided'}</li>
+            <li><strong>Age:</strong> {patient.age || 'N/A'}</li>
+            <li><strong>Gender:</strong> {patient.gender?.trim() || 'Not Specified'}</li>
+          </ul>
+
+          {/* inline picture controls */}
+          <div className="avatar-actions">
+            <label className="change-btn">
+              Change&nbsp;Photo
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleProfileImageChange}
+                hidden
+              />
+            </label>
+            {editForm.profilePicture && (
+              <button
+                className="delete-btn"
+                onClick={() => setEditForm({ ...editForm, profilePicture: '' })}
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          <button className="edit-btn" onClick={() => openEdit('profile')}>
+            Edit
+          </button>
+        </div>
+        </div>
+        <div className="right-col">
+        {/* ─────────── CARD 2 – COVID ─────────── */}
+        <div className="card covid-card-ui">
+          <h4 className="section-title">COVID‑19 Information</h4>
+          <ul className="card-body">
+            <li><strong>Tested Positive:</strong> {patient.testedPositive ? 'Yes' : 'No'}</li>
+            <li><strong>Symptoms:</strong> {patient.symptoms?.length ? patient.symptoms.join(', ') : 'None'}</li>
+            {patient.testDate && (
+              <li><strong>Test Date:</strong> {new Date(patient.testDate).toLocaleDateString()}</li>
+            )}
+          </ul>
+          <button className="edit-btn" onClick={() => openEdit('covid')}>
+            Edit
+          </button>
+        </div>
+
+        {/* ─────────── CARD 3 – MEDICAL ─────────── */}
+        <div className="card medical-card-ui">
+          <h4 className="section-title">Medical History</h4>
+          <p className="card-body">
+            <strong>Conditions:</strong>{' '}
+            {patient.medicalConditions?.length ? patient.medicalConditions.join(', ') : 'None'}
+          </p>
+          <button className="edit-btn" onClick={() => openEdit('medical')}>
+            Edit
+          </button>
+        </div>
+
+        {/* ─────────── CARD 4 – INSURANCE ─────────── */}
+        <div className="card insurance-card-ui">
+          <h4 className="section-title">Insurance Information</h4>
+          <ul className="card-body">
+            <li><strong>Insurance Company:</strong> {patient.insuranceCompany || 'N/A'}</li>
+            <li><strong>Coverage Status:</strong> {patient.insuranceStatus || 'N/A'}</li>
+          </ul>
+          <button className="edit-btn" onClick={() => openEdit('insurance')}>
+            Edit
+          </button>
+        </div>
+      </div>
+      </div>
+
+      {/* ─────────── CARD 5 – APPOINTMENTS ─────────── */}
+
+      {/* ─────────── MINI‑MODAL (re‑uses your editForm + save handler) ─────────── */}
+      {showEditProfileModal && editSection && (
+        <div className="modal-overlay">
+          <div className="modal-container small">
+            <h3>Edit {editSection.charAt(0).toUpperCase() + editSection.slice(1)}</h3>
+
+            {/* ==== FIELDS PER SECTION ==== */}
+            {editSection === 'profile' && (
+              <>
+                <input
+                  placeholder="Phone"
+                  value={editForm.contact}
+                  onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
+                />
+                <input
+                  placeholder="Address"
+                  value={editForm.address}
+                  onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                />
+                <input
+                  type="number"
+                  placeholder="Age"
+                  value={editForm.age}
+                  onChange={(e) => setEditForm({ ...editForm, age: Number(e.target.value) })}
+                />
+                <input
+                  placeholder="Gender"
+                  value={editForm.gender}
+                  onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                />
+              </>
+            )}
+
+            {editSection === 'covid' && (
+              <>
+                <label className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    checked={editForm.testedPositive}
+                    onChange={(e) => setEditForm({ ...editForm, testedPositive: e.target.checked })}
+                  />
+                  Tested&nbsp;Positive
+                </label>
+                <input
+                  type="date"
+                  value={
+                    editForm.testDate
+                      ? new Date(editForm.testDate).toISOString().split('T')[0]
+                      : ''
+                  }
+                  onChange={(e) =>
+                    setEditForm({
+                      ...editForm,
+                      testDate: e.target.value ? new Date(e.target.value) : null,
+                    })
+                  }
+                />
+                <input
+                  placeholder="Symptoms (comma separated)"
+                  value={editForm.symptoms}
+                  onChange={(e) => setEditForm({ ...editForm, symptoms: e.target.value })}
+                />
+              </>
+            )}
+
+            {editSection === 'medical' && (
+              <input
+                placeholder="Medical Conditions (comma separated)"
+                value={editForm.medicalConditions}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, medicalConditions: e.target.value })
+                }
+              />
+            )}
+
+            {editSection === 'insurance' && (
+              <>
+                <input
+                  placeholder="Insurance Company"
+                  value={editForm.insuranceCompany}
+                  onChange={(e) => setEditForm({ ...editForm, insuranceCompany: e.target.value })}
+                />
+                <input
+                  placeholder="Coverage Status"
+                  value={editForm.insuranceStatus}
+                  onChange={(e) => setEditForm({ ...editForm, insuranceStatus: e.target.value })}
+                />
+              </>
+            )}
+
+            {/* buttons */}
+            <div className="modal-buttons">
+              <button className="save-btn" onClick={handleSaveProfile}>
+                Save
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowEditProfileModal(false);
+                  setEditSection(null);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-
-      <div className="section-title">Medical History</div>
-      <p><strong>Conditions:</strong> {patient?.medicalConditions?.length > 0 ? patient.medicalConditions.join(', ') : "None"}</p>
-
-      <div className="section-title">Insurance Information</div>
-      <p><strong>Insurance Company:</strong> {patient?.insuranceCompany || "N/A"}</p>
-      <p><strong>Coverage Status:</strong> {patient?.insuranceStatus || "N/A"}</p>
-    </div>
-  </div>
-
-  <button className="edit-profile-btn" onClick={() => {setShowEditProfileModal(true)
-    setEditForm({
-        contact: patient.contact || "",
-        address: patient.address || "",
-        age: patient.age || 0,
-        gender: patient.gender || "",
-        testedPositive: patient.testedPositive || false,
-        testDate: patient.testDate ? new Date(patient.testDate) : null,
-        symptoms: patient.symptoms ? patient.symptoms.join(", ") : "",        // <-- Convert array to string
-        medicalConditions: patient.medicalConditions ? patient.medicalConditions.join(", ") : "",  // <-- Convert array to string
-        insuranceCompany: patient.insuranceCompany || "",
-        insuranceStatus: patient.insuranceStatus || "",
-        profilePicture: patient.profilePicture || ""
-    });
-  }
-
-  }>
-    Edit Profile
-  </button>
-</div>
-
-  {showEditProfileModal && (
-  <div className="modal-overlay">
-    <div className="modal-container">
-      <h2>Edit Full Profile</h2>
-
-      {/* Contact Field (Phone Number) */}
-      <input 
-        type="text" 
-        value={editForm.contact}
-        onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
-        placeholder="Phone Number"
-      />
-
-      {/* Address */}
-      <input 
-        type="text" 
-        value={editForm.address}
-        onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-        placeholder="Address"
-      />
-
-      {/* Age */}
-      <input 
-        type="number" 
-        value={editForm.age}
-        onChange={(e) => setEditForm({ ...editForm, age: Number(e.target.value) })}
-        placeholder="Age"
-      />
-
-      {/* Gender */}
-      <input 
-        type="text" 
-        value={editForm.gender}
-        onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
-        placeholder="Gender"
-      />
-
-      {/* COVID Section */}
-      <h3>COVID-19 Info</h3>
-
-      {/* ✅ Tested Positive aligned properly */}
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" , marginLeft: "40px"}}>
-        <label style={{ fontSize: "16px" }}>Tested Positive?</label>
-        <input
-          type="checkbox"
-          checked={editForm.testedPositive}
-          onChange={(e) => setEditForm({ ...editForm, testedPositive: e.target.checked })}
-        />
-        
-      </div>
-
-      {/* Test Date */}
-      <input 
-        type="date"
-        value={editForm.testDate ? new Date(editForm.testDate).toISOString().split('T')[0] : ""}
-        onChange={(e) => setEditForm({ ...editForm, testDate: e.target.value ? new Date(e.target.value) : null })}
-        placeholder="Test Date"
-      />
-
-      {/* Symptoms */}
-      <input 
-        type="text"
-        value={editForm.symptoms}
-        onChange={(e) => setEditForm({ ...editForm, symptoms: e.target.value })}
-        placeholder="Symptoms (e.g. Fever, Cough)"
-      />
-
-      {/* Medical Conditions */}
-      <h3>Medical History</h3>
-      <input 
-        type="text"
-        value={editForm.medicalConditions}
-        onChange={(e) => setEditForm({ ...editForm, medicalConditions: e.target.value })}
-        placeholder="Medical Conditions (e.g. Asthma, Diabetes)"
-      />
-
-      {/* Insurance Info */}
-      <h3>Insurance Info</h3>
-      <input 
-        type="text" 
-        value={editForm.insuranceCompany}
-        onChange={(e) => setEditForm({ ...editForm, insuranceCompany: e.target.value })}
-        placeholder="Insurance Company"
-      />
-
-      <input 
-        type="text" 
-        value={editForm.insuranceStatus}
-        onChange={(e) => setEditForm({ ...editForm, insuranceStatus: e.target.value })}
-        placeholder="Coverage Status"
-      />
-
-<h3>Profile Picture</h3>
-
-{editForm.profilePicture && (
-  <div style={{ 
-    display: "flex", 
-    flexDirection: "column", 
-    alignItems: "center", 
-    marginBottom: "20px" 
-  }}>
-    <img
-      src={editForm.profilePicture}
-      alt="Profile Preview"
-      style={{ 
-        width: "120px", 
-        height: "120px", 
-        borderRadius: "50%", 
-        objectFit: "cover", 
-        marginBottom: "10px", 
-        boxShadow: "0 4px 8px rgba(0,0,0,0.2)" 
-      }}
-    />
-    <button 
-      style={{ 
-        marginTop: "5px", 
-        padding: "6px 16px", 
-        backgroundColor: "#ff4d4f", 
-        color: "white", 
-        border: "none", 
-        borderRadius: "8px", 
-        cursor: "pointer",
-        fontWeight: "bold",
-        fontSize: "14px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-        transition: "background-color 0.3s ease"
-      }}
-      onClick={() => {
-        setEditForm((prev) => ({
-          ...prev,
-          profilePicture: "", // ✅ Clear picture
-        }));
-      }}
-      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d9363e")}
-      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#ff4d4f")}
-    >
-      Delete Image
-    </button>
-  </div>
-)}
-
-
-<input 
-  type="file"
-  accept="image/*"
-  onChange={(e) => handleProfileImageChange(e)}
-/>
-
-      {/* Save/Cancel Buttons */}
-      <div className="modal-buttons">
-        <button 
-          className="save-btn" 
-          onClick={handleSaveProfile}
-        >
-          Save All
-        </button>
-        <button 
-          className="cancel-btn" 
-          onClick={() => setShowEditProfileModal(false)}
-        >
-          Cancel
-        </button>
-      </div>
-
-    </div>
-  </div>
-)}
+    </>
+  )}
 
 
 
-  </div>
-)}
 
+
+
+ 
 
 {activeTab === 'doctors' && (
-  <div className="doctors-tab-layout">
+  <div className="doctors-tab-layout ">
     {/* LEFT: Doctor Cards */}
     <div className="doctors-left">
     <h2 className="section-title">Search Doctors</h2>
@@ -896,7 +903,8 @@ const [editForm, setEditForm] = useState({
 
     {showProfileModal && profileDoctor && (
   <div className="modal-overlay">
-    <div className="modal-container">
+    <div className="modal-container doctor-modal">
+    <div className="doctor-top">
       <h2>Dr. {profileDoctor.name}</h2>
       <img
         src={
@@ -905,14 +913,9 @@ const [editForm, setEditForm] = useState({
             : defaultDoctorImage
         }
         alt="Doctor"
-        style={{
-          width: "120px",
-          height: "120px",
-          borderRadius: "50%",
-          objectFit: "cover",
-          marginBottom: "10px",
-        }}
+       
       />
+        <div className="doctor-bio">
       <p><strong>Specialization:</strong> {profileDoctor.specialization || "General"}</p>
       <p><strong>Experience:</strong> {profileDoctor.experience || 0} years</p>
       <p><strong>Hospital:</strong> {profileDoctor.hospital?.name || "City Hospital"}</p>
@@ -920,9 +923,9 @@ const [editForm, setEditForm] = useState({
       <p><strong>COVID Care:</strong> {profileDoctor.covidCare ? "✅ Supports COVID Care" : "❌ No COVID Care"}</p>
 
       {/* Fake Reviews (You can replace with real reviews API later) */}
-      <h3>Patient Feedback</h3>
+      <h3 className="feedback-heading">Patient Feedback</h3>
 {profileFeedbacks.length > 0 ? (
-  <ul style={{ textAlign: "left" }}>
+  <ul className="feedback-list">
     {profileFeedbacks.map((fb, index) => (
       <li key={index}>
         ⭐ {fb.rating} - {fb.review} ({fb.patientId?.name || "Anonymous"})
@@ -944,6 +947,8 @@ const [editForm, setEditForm] = useState({
         Close
       </button>
     </div>
+  </div>
+  </div>
   </div>
 )}
 
@@ -1076,7 +1081,7 @@ const [editForm, setEditForm] = useState({
         )}
       </div>
     </div>
+   </div>
   );
 }
-
 export default PatientDashboard;
