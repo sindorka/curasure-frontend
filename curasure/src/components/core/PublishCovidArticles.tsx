@@ -23,9 +23,10 @@ function PublishCovidArticles({ providerId }: { providerId: string }) {
   };
 
   return (
-    <div className="card">
-      <h2 style={{ marginBottom: "20px" }}>📰 Publish COVID-19 Article</h2>
-      <form onSubmit={handleSubmit} className="form-group">
+    <div className="publish-article-page">
+      <h2 className="page-title">📰 Publish COVID-19 Article</h2>
+      <form onSubmit={handleSubmit} className="publish-form">
+        <div className="form-group">
         <label htmlFor="title">Title</label>
         <input
           id="title"
@@ -36,6 +37,8 @@ function PublishCovidArticles({ providerId }: { providerId: string }) {
           required
           className="input-field"
         />
+        </div>
+        <div className="form-group">
 
         <label htmlFor="content">Content</label>
         <textarea
@@ -47,6 +50,7 @@ function PublishCovidArticles({ providerId }: { providerId: string }) {
           required
           className="textarea-field"
         />
+        </div>
 
         <button type="submit" className="primary-btn">Publish Article</button>
       </form>
