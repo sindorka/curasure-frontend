@@ -23,6 +23,7 @@
   align-items: center;
   height: calc(100vh - 60px); /* Adjust for header height */
   padding-top: 30px;
+  background-color: white;
 }
 
 .register-box {

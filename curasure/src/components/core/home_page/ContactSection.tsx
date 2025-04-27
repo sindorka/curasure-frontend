@@ -1,10 +1,8 @@
 import React from 'react';
-import '../../App.css';
+import '../../../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin, faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import leftImage from '../../assets/contact1.svg'; 
-import rightImage from '../../assets/contact2.svg'; 
 
 const ContactSection: React.FC = () => {
   return (
