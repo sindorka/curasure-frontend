@@ -58,7 +58,7 @@ body.dark-theme .navbar{
   color:#fff;
   transition:.3s
 }
-.nav-item:hover,.nav-item.active{
+.nav-item:hover {
   background:#333
 }
 body.light-theme .nav-item{
