@@ -158,9 +158,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ currentUserId, selectedUser }) 
                 <div style={{ fontSize: "12px", fontWeight: "bold", marginBottom: "4px" }}>
                   {profile?.name || "Unknown"} {isMe ? "(You)" : ""}
                 </div>
-                {msg.message}
+                <div style={{ textAlign: "left", fontSize: "14px", marginBottom: "4px" }}>
+                  {msg.message}
+                </div>
                 {isMe && (
-                  <div style={{ fontSize: "10px", marginTop: "4px", color: "#888" }}>
+                  <div style={{ fontSize: "10px", marginTop: "4px", color: "#888", textAlign: "left" }}>
                     {msg.delivered ? "✔ Delivered" : "🕓 Sending..."}
                   </div>
                 )}

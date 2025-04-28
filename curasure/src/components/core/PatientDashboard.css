@@ -1,241 +1,302 @@
 .doctors-tab-layout {
   display: flex;
-  flex-wrap: nowrap;          /* ← keep both panes side‑by‑side */
+  flex-wrap: nowrap;
+  /* ← keep both panes side‑by‑side */
   gap: 24px;
   width: 100%;
-  height: calc(100vh - 40px); /* adjust “40” if you have more top padding */
+  height: calc(100vh - 40px);
+  /* adjust “40” if you have more top padding */
   box-sizing: border-box;
 }
- /* ②  LEFT COLUMN  – Doctor search / list */
+
+/* ②  LEFT COLUMN  – Doctor search / list */
 .doctors-left {
-  flex: 0 0 50%;          /* was 45 % */
+  flex: 0 0 50%;
+  /* was 45 % */
   max-width: 50%;
   overflow-y: auto;
   padding: 20px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
 }
 
 /* ③  RIGHT COLUMN  – Appointment panel */
 .doctors-right {
-  flex: 0 0 50%;          /* was 55 % (flex:1) */
+  flex: 0 0 50%;
+  /* was 55 % (flex:1) */
   max-width: 50%;
   overflow-y: auto;
   padding: 20px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
 }
 
-  
-  .search-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-  
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    gap: 5px;
-  }
-  
-  .doctors-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .doctor-card {
-    display: flex;
-    background: #f9f9f9;
-    border-radius: 10px;
-    padding: 12px;
-    gap: 12px;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .doctors-left .doctor-card{
-    flex-direction: row;
-    gap: 16px;
-  }
-  .doctor-img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  @media(max-width: 900px){
-    .full‑width.doctors-tab-layout{
-      grid-template-columns: 1fr;
-      height: auto;
-    }
-  }
-  .doctor-info {
-    flex: 1;
-  }
-  
-  .button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
-  
-  .view-profile-btn, .book-btn, .view-appointments-btn, .book-slot-btn, .back-btn {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    background-color: #1c2e40;
-    color: white;
-  }
-  
-  .view-profile-btn {
-    background-color: #6c757d;
-  }
-  
-  .latest-feedback {
-    font-size: 12px;
-    color: gray;
-  }
-  
-  .no-doctor-selected {
-    text-align: center;
-    margin-top: 50px;
-  }
-  
-  .calendar-container {
-    text-align: center;
-  }
-  
-  .available-slots {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin: 20px 0;
-  }
-  
-  .slot-btn {
-    padding: 8px 16px;
-    background-color: #e7e7e7;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .slot-btn.selected {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .confirm-appointment-btn {
-    background-color: #28a745;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    margin-top: 10px;
-    color: white;
-    cursor: pointer;
-  }
+.logout-section {
+  margin-top: 470px;
+}
 
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+.logout-divider {
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 5px;
+}
+
+.doctors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.doctor-card {
+  display: flex;
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 12px;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.doctors-left .doctor-card {
+  flex-direction: row;
+  gap: 16px;
+}
+
+.doctor-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media(max-width: 900px) {
+  .full‑width.doctors-tab-layout {
+    grid-template-columns: 1fr;
+    height: auto;
   }
-  
-  .modal-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-  }
-  
-  .modal-form input,
-  .modal-form textarea {
-    width: 100%;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .save-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .cancel-btn {
-    background-color: #ccc;
-    color: black;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  /* ─── Doctor modal layout tweaks ───────────────────────── */
-.doctor-modal           { max-width: 560px; text-align: center; }
+}
+
+.doctor-info {
+  flex: 1;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.view-profile-btn,
+.book-btn,
+.view-appointments-btn,
+.book-slot-btn,
+.back-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #1c2e40;
+  color: white;
+}
+
+.view-profile-btn {
+  background-color: #6c757d;
+}
+
+.latest-feedback {
+  font-size: 12px;
+  color: gray;
+}
+
+.no-doctor-selected {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.calendar-container {
+  text-align: center;
+}
+
+.available-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.slot-btn {
+  padding: 8px 16px;
+  background-color: #e7e7e7;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.slot-btn.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.confirm-appointment-btn {
+  background-color: #28a745;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.modal-form input,
+.modal-form textarea {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.save-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: black;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ─── Doctor modal layout tweaks ───────────────────────── */
+.doctor-modal {
+  max-width: 560px;
+  text-align: center;
+}
 
 .doctor-top {
-  flex-direction: row-reverse;   /* <img> now right, bio left */
+  flex-direction: row-reverse;
+  /* <img> now right, bio left */
   gap: 1.6rem;
 }
 
-.doctor-top img         {          /* avatar */
-  width: 120px; height: 120px;
-  border-radius: 50%; object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+.doctor-top img {
+  /* avatar */
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
 }
+
 .doctor-bio {
-  flex: 1;                  /* takes remaining width */
+  flex: 1;
+  /* takes remaining width */
   text-align: left;
 }
 
-.doctor-bio h2          { margin: 0 0 .6rem; font-weight: 700; }
-
-.doctor-bio ul          {            /* bio list */
-  list-style: none; padding: 0; margin: 0;
-  text-align: left;                  /* keep labels left‑aligned */
-  font-size: .93rem; line-height: 1.4;
+.doctor-bio h2 {
+  margin: 0 0 .6rem;
+  font-weight: 700;
 }
 
-.doctor-bio li + li     { margin-top: .35rem; }
+.doctor-bio ul {
+  /* bio list */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  /* keep labels left‑aligned */
+  font-size: .93rem;
+  line-height: 1.4;
+}
+
+.doctor-bio li+li {
+  margin-top: .35rem;
+}
 
 .feedback-heading,
 .feedback-list {
   text-align: center;
 }
+
 .feedback-list {
   list-style: none;
   padding: 0;
   margin: 0 0 1.6rem;
 }
-.feedback-list li + li { margin-top: .35rem; }
 
-  .button-group button,
+.feedback-list li+li {
+  margin-top: .35rem;
+}
+
+.button-group button,
 .book-btn,
 .view-profile-btn,
 .feedback-btn,
@@ -321,119 +382,126 @@
 }
 
 .slot-btn:disabled {
-    background-color: #ddd;
-    color: #777;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
+  background-color: #ddd;
+  color: #777;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 
-  .appointments-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .appointments-table th,
-  .appointments-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  .delete-btn {
-    padding: 6px 12px;
-    background-color: #ff5757;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-  /* COVID Form Modal */
+.appointments-table th,
+.appointments-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background-color: #ff5757;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* COVID Form Modal */
 .modal-overlay {
-    position: fixed;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);  
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 20px; /* Add padding to handle very small screens */
-  overflow-y: auto; /* Allow scroll if modal too big */
-  }
-  
-  .modal-container {
-    background: white;
+  padding: 20px;
+  /* Add padding to handle very small screens */
+  overflow-y: auto;
+  /* Allow scroll if modal too big */
+}
+
+.modal-container {
+  background: white;
   padding: 30px 25px;
   border-radius: 15px;
-  width: 500px;   /* Increase width */
+  width: 500px;
+  /* Increase width */
   max-width: 90%;
-  max-height: 90vh; /* Don't overflow screen height */
-  overflow-y: auto; /* Scroll inside modal if content long */
+  max-height: 90vh;
+  /* Don't overflow screen height */
+  overflow-y: auto;
+  /* Scroll inside modal if content long */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   animation: popIn 0.3s ease;
-  }
-  
-  .modal-container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  /* Questionnaire Checkboxes */
-  .modal-container label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 16px;
-    text-align: left;
-  }
-  
-  .modal-container input[type="checkbox"] {
-    margin-right: 8px;
-  }
-  
-  /* Modal Buttons */
-  .modal-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .save-btn, .cancel-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .save-btn {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .save-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .cancel-btn {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #d32f2f;
-  }
-  
+}
+
+.modal-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Questionnaire Checkboxes */
+.modal-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.modal-container input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #45a049;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #d32f2f;
+}
+
 
 @keyframes popIn {
   from {
     transform: scale(0.8);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -463,7 +531,8 @@
   gap: 10px;
 }
 
-.save-btn, .cancel-btn {
+.save-btn,
+.cancel-btn {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
@@ -483,115 +552,119 @@
 }
 
 .profile-container {
-    display: flex;
-    justify-content: center;
-    padding: 0px 20px;
-    min-height: 100vh;
-    background: #f9f9f9;
-  }
-  
-  .profile-card {
-    background: white;
-    padding: 40px 50px;
-    border-radius: 15px;
-    width: 750px;
-    max-width: 90%;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 0px;
-  }
-  
-  .profile-header img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px;
-    margin-bottom: 15px;
-  }
-  
-  .profile-header h2 {
-    font-size: 28px;
-    color: #333;
-  }
-  
-  .profile-info-grid {
-    display: flex;
-    gap: 40px;
-    width: 100%;
-    margin-top: 10px;
-  }
-  .left-section{
-    margin-top: 30px;
-  }
-  .left-section, .right-section {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .left-section p, .right-section p {
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: #555;
-  }
-  
-  .section-title {
-    margin: 20px 0 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #4CAF50;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
-  }
-  
-  .edit-profile-btn {
-    margin-top: 30px;
-    padding: 12px 24px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .edit-profile-btn:hover {
-    background-color: #45a049;
-  }
-  
-  /* 🩺 For COVID Form Grid */
+  display: flex;
+  justify-content: center;
+  padding: 0px 20px;
+  min-height: 100vh;
+  background: #f9f9f9;
+}
+
+.profile-card {
+  background: white;
+  padding: 40px 50px;
+  border-radius: 15px;
+  width: 750px;
+  max-width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.profile-header img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px;
+  margin-bottom: 15px;
+}
+
+.profile-header h2 {
+  font-size: 28px;
+  color: #333;
+}
+
+.profile-info-grid {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.left-section {
+  margin-top: 30px;
+}
+
+.left-section,
+.right-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.left-section p,
+.right-section p {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.section-title {
+  margin: 20px 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4CAF50;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.edit-profile-btn {
+  margin-top: 30px;
+  padding: 12px 24px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-profile-btn:hover {
+  background-color: #45a049;
+}
+
+/* 🩺 For COVID Form Grid */
 .covid-form-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 20px 0;
-    align-items: flex-start;
-  }
-  
-  .checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .checkbox-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-  }
-  
-  /* ─────────────────────────────────────────────
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+  align-items: flex-start;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* ─────────────────────────────────────────────
    PATIENT PROFILE AESTHETICS
    (append to PatientDashboard.css)
 ───────────────────────────────────────────── */
@@ -600,13 +673,13 @@
 .profile-grid {
   display: grid;
   gap: var(--gap, 2.5rem);
-  grid-template-columns: repeat(2, 1fr);  
- 
+  grid-template-columns: repeat(2, 1fr);
+
 }
 
 /* Base card */
 .card {
-  
+
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 28px rgba(11, 16, 61, 0.08);
@@ -645,6 +718,7 @@
   font-weight: 600;
   color: #0b103d;
 }
+
 .profile-grid.two-column {
   display: flex;
   gap: 2.5rem;
@@ -714,14 +788,15 @@
 .card {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 8px 28px rgba(11,16,61,0.08);
+  box-shadow: 0 8px 28px rgba(11, 16, 61, 0.08);
   position: relative;
   overflow: hidden;
   transition: transform .25s ease, box-shadow .25s ease;
 }
+
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(11,16,61,0.12);
+  box-shadow: 0 12px 32px rgba(11, 16, 61, 0.12);
 }
 
 /* Shared header & body */
@@ -731,16 +806,19 @@
   align-items: center;
   margin-bottom: 1.25rem;
 }
+
 .card-body {
   list-style: none;
   padding: 0;
   margin: 0 0 1.75rem;
   line-height: 1.55;
 }
-.card-body li + li,
-.card-body p + p {
+
+.card-body li+li,
+.card-body p+p {
   margin-top: .35rem;
 }
+
 .card-body strong {
   font-weight: 600;
   color: #0b103d;
@@ -760,6 +838,7 @@
   cursor: pointer;
   transition: background .25s ease;
 }
+
 .edit-btn:hover {
   background: #161d66;
 }
@@ -773,6 +852,7 @@
   margin-bottom: .75rem;
   position: relative;
 }
+
 .section-title::after {
   content: "";
   display: block;
@@ -789,6 +869,7 @@
   gap: .35rem;
   margin-top: .6rem;
 }
+
 .change-btn,
 .delete-btn {
   border: 0;
@@ -797,10 +878,25 @@
   border-radius: 6px;
   cursor: pointer;
 }
-.change-btn { background: #dfe1f7; color: #0b103d; }
-.change-btn:hover { background: #cbd0f4; }
-.delete-btn { background: #ffebe8; color: #d13639; }
-.delete-btn:hover { background: #ffdedd; }
+
+.change-btn {
+  background: #dfe1f7;
+  color: #0b103d;
+}
+
+.change-btn:hover {
+  background: #cbd0f4;
+}
+
+.delete-btn {
+  background: #ffebe8;
+  color: #d13639;
+}
+
+.delete-btn:hover {
+  background: #ffdedd;
+}
+
 /* List & paragraphs inside cards */
 .card-body {
   list-style: none;
@@ -809,8 +905,8 @@
   line-height: 1.55;
 }
 
-.card-body li + li,
-.card-body p + p {
+.card-body li+li,
+.card-body p+p {
   margin-top: 0.35rem;
 }
 
@@ -823,7 +919,8 @@
 .section-title {
   font-weight: 600;
   font-size: 1.05rem;
-  color: #0b103d;         /* landing‑page accent green */
+  color: #0b103d;
+  /* landing‑page accent green */
   text-align: center;
   margin-bottom: 0.75rem;
   position: relative;
@@ -852,6 +949,7 @@
   cursor: pointer;
   transition: background 0.25s ease;
 }
+
 .edit-btn:hover {
   background: #161d66;
 }
@@ -954,6 +1052,7 @@
   background: #3c8f4f;
   color: #fff;
 }
+
 .save-btn:hover {
   background: #2f6f3d;
 }
@@ -962,6 +1061,7 @@
   background: #e4e6f6;
   color: #0b103d;
 }
+
 .cancel-btn:hover {
   background: #d3d7f4;
 }
@@ -971,242 +1071,251 @@
   .profile-grid {
     grid-template-columns: 1fr;
   }
+
   .edit-btn {
     top: 0.75rem;
     right: 0.75rem;
-  }/* ─────────────────────────────────────────────
+  }
+
+  /* ─────────────────────────────────────────────
    PATIENT PROFILE AESTHETICS
    (append to PatientDashboard.css)
 ───────────────────────────────────────────── */
 
-/* Grid wrapper – 2 × 2 on desktop, 1 column on ≤900 px */
-.profile-grid {
-  --gap: 2.5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--gap);
-  padding: 2rem 0;
-}
-
-/* Base card */
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 28px rgba(11, 16, 61, 0.08);
-  padding: 2.25rem 2rem 2.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(11, 16, 61, 0.12);
-}
-
-.profile-card-ui{
-  margin-top: 100rem;
-}
-/* Header of the profile card */
-.profile-card-ui .card-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.profile-card-ui img {
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid #f4f6ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-  margin-bottom: 0.75rem;
-}
-
-.profile-card-ui h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #0b103d;
-}
-
-/* List & paragraphs inside cards */
-.card-body {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.75rem;
-  line-height: 1.55;
-}
-
-.card-body li + li,
-.card-body p + p {
-  margin-top: 0.35rem;
-}
-
-.card-body strong {
-  font-weight: 600;
-  color: #0b103d;
-}
-
-/* Section titles (Covid, Medical, Insurance) */
-.section-title {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #3c8f4f;          /* landing‑page accent green */
-  text-align: center;
-  margin-bottom: 0.75rem;
-  position: relative;
-}
-
-.section-title::after {
-  content: "";
-  display: block;
-  width: 70%;
-  height: 1px;
-  background: #e9ecf8;
-  margin: 0.6rem auto 0;
-}
-
-/* EDIT pill in top‑right of every card */
-.edit-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: #0b103d;
-  color: #fff;
-  border: 0;
-  font-size: 0.75rem;
-  padding: 0.45rem 1.1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.25s ease;
-}
-.edit-btn:hover {
-  background: #161d66;
-}
-
-/* Avatar actions under the picture */
-.avatar-actions {
-  display: flex;
-  justify-content: center;
-  gap: 0.35rem;
-  margin-top: 0.6rem;
-}
-
-.change-btn,
-.delete-btn {
-  border: 0;
-  font-size: 0.68rem;
-  padding: 0.35rem 0.9rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.change-btn {
-  background: #dfe1f7;
-  color: #0b103d;
-}
-
-.change-btn:hover {
-  background: #cbd0f4;
-}
-
-.delete-btn {
-  background: #ffebe8;
-  color: #d13639;
-}
-
-.delete-btn:hover {
-  background: #ffdedd;
-}
-
-/* Small modal */
-.modal-container.small {
-  width: min(90vw, 440px);
-  padding: 2rem 2.5rem;
-}
-
-.modal-container.small h3 {
-  margin-top: 0;
-  text-align: center;
-  color: #0b103d;
-}
-
-/* Inputs inside the mini‑modal */
-.modal-container.small input[type="text"],
-.modal-container.small input[type="number"],
-.modal-container.small input[type="date"] {
-  width: 100%;
-  border: 1px solid #c8cbe9;
-  border-radius: 8px;
-  padding: 0.55rem 0.75rem;
-  font-size: 0.9rem;
-  margin-bottom: 0.9rem;
-  outline: none;
-  transition: border 0.2s ease;
-}
-
-.modal-container.small input:focus {
-  border-color: #3c8f4f;
-}
-
-/* Checkbox row */
-.checkbox-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  gap: 0.55rem;
-  font-size: 0.9rem;
-}
-
-/* Save / Cancel */
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 0.2rem;
-}
-
-.save-btn,
-.cancel-btn {
-  min-width: 96px;
-  border: 0;
-  padding: 0.55rem 1.2rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.25s ease;
-}
-
-.save-btn {
-  background: #3c8f4f;
-  color: #fff;
-}
-.save-btn:hover {
-  background: #2f6f3d;
-}
-
-.cancel-btn {
-  background: #e4e6f6;
-  color: #0b103d;
-}
-.cancel-btn:hover {
-  background: #d3d7f4;
-}
-
-/* Responsive tweak for tablets */
-@media (max-width: 900px) {
+  /* Grid wrapper – 2 × 2 on desktop, 1 column on ≤900 px */
   .profile-grid {
-    grid-template-columns: 1fr;
+    --gap: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--gap);
+    padding: 2rem 0;
   }
+
+  /* Base card */
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(11, 16, 61, 0.08);
+    padding: 2.25rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(11, 16, 61, 0.12);
+  }
+
+  .profile-card-ui {
+    margin-top: 100rem;
+  }
+
+  /* Header of the profile card */
+  .profile-card-ui .card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .profile-card-ui img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #f4f6ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    margin-bottom: 0.75rem;
+  }
+
+  .profile-card-ui h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0b103d;
+  }
+
+  /* List & paragraphs inside cards */
+  .card-body {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    line-height: 1.55;
+  }
+
+  .card-body li+li,
+  .card-body p+p {
+    margin-top: 0.35rem;
+  }
+
+  .card-body strong {
+    font-weight: 600;
+    color: #0b103d;
+  }
+
+  /* Section titles (Covid, Medical, Insurance) */
+  .section-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #3c8f4f;
+    /* landing‑page accent green */
+    text-align: center;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 70%;
+    height: 1px;
+    background: #e9ecf8;
+    margin: 0.6rem auto 0;
+  }
+
+  /* EDIT pill in top‑right of every card */
   .edit-btn {
-    top: 0.75rem;
-    right: 0.75rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #0b103d;
+    color: #fff;
+    border: 0;
+    font-size: 0.75rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease;
   }
-}
+
+  .edit-btn:hover {
+    background: #161d66;
+  }
+
+  /* Avatar actions under the picture */
+  .avatar-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+  }
+
+  .change-btn,
+  .delete-btn {
+    border: 0;
+    font-size: 0.68rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .change-btn {
+    background: #dfe1f7;
+    color: #0b103d;
+  }
+
+  .change-btn:hover {
+    background: #cbd0f4;
+  }
+
+  .delete-btn {
+    background: #ffebe8;
+    color: #d13639;
+  }
+
+  .delete-btn:hover {
+    background: #ffdedd;
+  }
+
+  /* Small modal */
+  .modal-container.small {
+    width: min(90vw, 440px);
+    padding: 2rem 2.5rem;
+  }
+
+  .modal-container.small h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #0b103d;
+  }
+
+  /* Inputs inside the mini‑modal */
+  .modal-container.small input[type="text"],
+  .modal-container.small input[type="number"],
+  .modal-container.small input[type="date"] {
+    width: 100%;
+    border: 1px solid #c8cbe9;
+    border-radius: 8px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.9rem;
+    outline: none;
+    transition: border 0.2s ease;
+  }
+
+  .modal-container.small input:focus {
+    border-color: #3c8f4f;
+  }
+
+  /* Checkbox row */
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+  }
+
+  /* Save / Cancel */
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.2rem;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    min-width: 96px;
+    border: 0;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s ease;
+  }
+
+  .save-btn {
+    background: #3c8f4f;
+    color: #fff;
+  }
+
+  .save-btn:hover {
+    background: #2f6f3d;
+  }
+
+  .cancel-btn {
+    background: #e4e6f6;
+    color: #0b103d;
+  }
+
+  .cancel-btn:hover {
+    background: #d3d7f4;
+  }
+
+  /* Responsive tweak for tablets */
+  @media (max-width: 900px) {
+    .profile-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .edit-btn {
+      top: 0.75rem;
+      right: 0.75rem;
+    }
+  }
 
 }
 
@@ -1219,15 +1328,17 @@
 /* 2️⃣ the new wrapper simply starts after the sidebar  */
 .page-body {
   margin-left: var(--sidebar-width);
-  padding: 0 24px;               /* optional nice side‑padding */
+  padding: 0 24px;
+  /* optional nice side‑padding */
 }
 
 /* 3️⃣ make sure long tables / doctor columns don't expand under the sidebar */
 .page-body,
-.page-body > * {
+.page-body>* {
   max-width: calc(100vw - var(--sidebar-width));
   box-sizing: border-box;
 }
+
 /* ───────────────────────── Insurance cards ───────────────────────── */
 
 .package-grid {
@@ -1238,9 +1349,13 @@
   margin-top: 24px;
   width: 100%;
 }
-@media(max-width:900px){
-  .package-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+
+@media(max-width:900px) {
+  .package-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
 }
+
 .package-card {
   background: #ffffff;
   border-radius: 16px;
@@ -1271,11 +1386,18 @@
   line-height: 1.55;
 }
 
-.pkg-details li + li { margin-top: 0.5rem; }
+.pkg-details li+li {
+  margin-top: 0.5rem;
+}
 
-.pkg-details strong { color: #555; }
+.pkg-details strong {
+  color: #555;
+}
 
-.company { color: #6b6e8b; font-size: 0.85rem; }
+.company {
+  color: #6b6e8b;
+  font-size: 0.85rem;
+}
 
 .pkg-btn {
   align-self: flex-start;
@@ -1288,27 +1410,41 @@
   font-size: 0.9rem;
 }
 
-.pkg-btn:hover { filter: brightness(0.95); }
+.pkg-btn:hover {
+  filter: brightness(0.95);
+}
 
-.subscribe   { background: #28a745; color: #fff; }
-.unsubscribe { background: #e74c3c; color: #fff; }
+.subscribe {
+  background: #28a745;
+  color: #fff;
+}
+
+.unsubscribe {
+  background: #e74c3c;
+  color: #fff;
+}
 
 /* mobile tweak */
 
 /* ─── Dashboard two‑column flex ───────────────────────── */
 .dashboard-layout {
   display: flex !important;
-  height: 100vh;        /* fill viewport height, so scrolling happens inside */
+  height: 100vh;
+  /* fill viewport height, so scrolling happens inside */
   overflow: hidden;
 }
+
 .dashboard-layout .sidebar {
-  flex: 0 0 220px;       /* match your inline width: 220px */
+  flex: 0 0 220px;
+  /* match your inline width: 220px */
 }
-.dashboard-layout > .page-body {
+
+.dashboard-layout>.page-body {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;      /* scrolls if content taller than 100vh */
+  overflow-y: auto;
+  /* scrolls if content taller than 100vh */
 }
 
 /* ─── Main‑content stretches full width ──────────────── */
@@ -1316,6 +1452,7 @@
   width: 100%;
   box-sizing: border-box;
 }
+
 /* ─── Articles grid ───────────────────────── */
 .article-grid {
   display: grid;
@@ -1328,25 +1465,29 @@
 .article-card {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   padding: 1.6rem;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .article-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
+
 .article-title {
   margin: 0 0 0.5rem;
   font-size: 1.2rem;
   color: #0b103d;
 }
+
 .article-excerpt {
   color: #555;
   line-height: 1.5;
   margin-bottom: 0.8rem;
 }
+
 .article-date {
   font-size: 0.85rem;
   color: #7f8c8d;
@@ -1355,11 +1496,17 @@
 /* ─── Modal ───────────────────────────────── */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
 }
+
 .modal-container {
   background: #fff;
   border-radius: 12px;
@@ -1368,13 +1515,15 @@
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
+
 .article-full {
   white-space: pre-wrap;
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
+
 .cancel-btn {
   background-color: #e74c3c;
   color: white;
@@ -1383,9 +1532,11 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
 .cancel-btn:hover {
   background-color: #c0392b;
 }
+
 /*──────────────────────────────────────────────────────────────
   PROFILE PAGE LAYOUT & SIZING OVERRIDES
 ──────────────────────────────────────────────────────────────*/
@@ -1393,17 +1544,22 @@
 /* 1. Two‑column container: center both columns, increase spacing */
 .profile-grid.two.column {
   display: flex;
-  justify-content: center;  /* center the two columns in the page */
-  gap: 4rem;                 /* increase horizontal gap between columns */
-  padding: 3rem 0;           /* add more vertical breathing room */
+  justify-content: center;
+  /* center the two columns in the page */
+  gap: 4rem;
+  /* increase horizontal gap between columns */
+  padding: 3rem 0;
+  /* add more vertical breathing room */
 }
 
 /* 2. Left column (Profile card) */
 .profile-grid.two.column .left-col {
   flex: 0 0 50%;
   display: flex;
-  justify-content: center;  /* center the profile card horizontally */
-  align-items: flex-start;  /* align it to the top of the column */
+  justify-content: center;
+  /* center the profile card horizontally */
+  align-items: flex-start;
+  /* align it to the top of the column */
 }
 
 /* 3. Right column (the other three cards stacked) */
@@ -1411,7 +1567,8 @@
   flex: 0 0 40%;
   display: flex;
   flex-direction: column;
-  gap: 4rem;                 /* increase vertical gap between each card */
+  gap: 4rem;
+  /* increase vertical gap between each card */
 }
 
 /* 4. Force all cards to fill their column width */
